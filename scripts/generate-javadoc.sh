@@ -46,7 +46,7 @@ pushd $JENKINS_DIR
         echo ">> Found release ${release}"
         git checkout $release
         git clean -xf
-        mvn javadoc:aggregate
+        nice mvn javadoc:aggregate
 
         if [ $? -ne 0 ]; then
             echo ">> failed to generate javadocs for ${release}"
@@ -54,6 +54,7 @@ pushd $JENKINS_DIR
         fi;
 
         mv target/site/apidocs ${ARCHIVE_DIR}/${release}
+        exit 0
     done;
 
 popd;
