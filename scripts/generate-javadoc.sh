@@ -40,7 +40,7 @@ fi;
 
 pushd $JENKINS_DIR
 
-    RELEASES=$(git tag -l jenkins-2\* --sort=-version:refname)
+RELEASES=$(git tag -l jenkins-2\* | sort --version-sort)
 
     for release in $RELEASES; do
         echo ">> Found release ${release}"
