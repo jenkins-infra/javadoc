@@ -16,7 +16,7 @@ for path in $(find $LATESTDIR -type f \( -iname "*.html" ! -iname "*[-]*" \) ); 
     # Bash string substitutions are fun =_=
     trimmed=${path//.html/}
     # Compute the absolute URL path to the classes, including our /byShortName/ urlspace
-    relative="/${trimmed//$LATESTDIR\/}"
+    relative="/${path//$LATESTDIR\/}"
 
     # purge any paths we found with hyphens. This is necessary because the
     # `-iname` filter above only applies to the filename, and not the full
