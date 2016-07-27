@@ -1,25 +1,6 @@
 #!/bin/bash
 
-OUTPUT_DIR="${PWD}/build"
-JENKINS_DIR="${OUTPUT_DIR}/jenkins.git"
-SITE_DIR="${OUTPUT_DIR}/site"
-ARCHIVE_DIR="${SITE_DIR}/archive"
-
-
-function ensure_bin() {
-    which $1 2>&1 > /dev/null
-    if [ $? -ne 0 ]; then
-        echo ">> ${1} must be installed and on PATH (${PATH})"
-        exit 1;
-    fi;
-}
-
-function mkdir_p() {
-    if [ ! -d $1 ]; then
-        echo ">> creating ${1}";
-        mkdir -p $1
-    fi;
-}
+source "$(dirname $0)/common.sh"
 
 ensure_bin 'mvn'
 ensure_bin 'git'
@@ -50,7 +31,6 @@ function generate_javadoc() {
 
     mv target/site/apidocs ${ARCHIVE_DIR}/${1}
     popd
-
 }
 
 for release in 1.554 1.565 1.580 1.596 1.609 1.625 1.642 1.651 2.7; do
