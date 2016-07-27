@@ -1,6 +1,8 @@
 #!/usr/bin/env groovy
 
 node {
+    checkout scm
+
     stage 'Generate Javadocs'
     withEnv(["PATH+MVN=${tool 'mvn'}/bin", "JAVA_HOME=${tool 'jdk8'}"]) {
         sh './scripts/generate-javadoc.sh'
