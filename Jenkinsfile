@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
-try {
-    node {
+node {
+    try {
         checkout scm
 
         stage 'Generate Javadocs'
@@ -25,13 +25,13 @@ try {
             deleteDir()
         }
     }
-}
-catch {
-    String recipient = 'infra@lists.jenkins-ci.org'
+    catch {
+        String recipient = 'infra@lists.jenkins-ci.org'
 
-    mail subject: "${env.JOB_NAME} (${env.BUILD_NUMBER}) failed",
-            body: "It appears that ${env.BUILD_URL} is failing, somebody should do something about that",
-              to: recipient,
-         replyTo: recipient,
-            from: 'noreply@ci.jenkins.io'
+        mail subject: "${env.JOB_NAME} (${env.BUILD_NUMBER}) failed",
+                body: "It appears that ${env.BUILD_URL} is failing, somebody should do something about that",
+                to: recipient,
+            replyTo: recipient,
+                from: 'noreply@ci.jenkins.io'
+    }
 }
