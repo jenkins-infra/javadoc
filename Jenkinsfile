@@ -26,7 +26,7 @@ try {
         }
     }
 }
-catch {
+catch (exc) {
     String recipient = 'infra@lists.jenkins-ci.org'
 
     mail subject: "${env.JOB_NAME} (${env.BUILD_NUMBER}) failed",
