@@ -38,23 +38,26 @@ else
 fi;
 
 
+function generate_javadoc() {
+    pushd $JENKINS_DIR
+    git clean -xf
+    git checkout $1
+    nice mvn javadoc:aggregate
+
+    if [ $? -ne 0 ]; then
+        echo ">> failed to generate javadocs for ${1}"
+    fi;
+
+    mv target/site/apidocs ${ARCHIVE_DIR}/${1}
+    popd
+
+}
+
+for release in 1.554 1.565 1.580 1.596 1.609 1.625 1.642 1.651 2.7; do
+    echo ">> Found release ${release}"
+    generate_javadoc "jenkins-${release}"
+done;
+
 pushd $JENKINS_DIR
-
-RELEASES=$(git tag -l jenkins-2\* | sort --version-sort)
-
-    for release in $RELEASES; do
-        echo ">> Found release ${release}"
-        git checkout $release
-        git clean -xf
-        nice mvn javadoc:aggregate
-
-        if [ $? -ne 0 ]; then
-            echo ">> failed to generate javadocs for ${release}"
-            exit 1;
-        fi;
-
-        mv target/site/apidocs ${ARCHIVE_DIR}/${release}
-        exit 0
-    done;
-
+    generate_javadoc $(git tag -l jenkins-\* | sort --version-sort --reverse | head -n 1)
 popd;
