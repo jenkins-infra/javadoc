@@ -1,3 +1,4 @@
 = Jenkins Javadocs
 
-
+This repository contains the scripts necessary to generate javadocs for
+publication inside of the jenkins.io infrastructure
