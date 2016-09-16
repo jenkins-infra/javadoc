@@ -36,4 +36,4 @@ for release in 1.554 1.565 1.580 1.596 1.609 1.625 1.642 1.651 2.7; do
     generate_javadoc_core "${release}"
 done;
 
-groovy generate-javadoc-plugins.groovy
+groovy scripts/generate-javadoc-plugins.groovy

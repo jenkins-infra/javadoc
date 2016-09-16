@@ -6,6 +6,10 @@ try {
     node {
         checkout scm
 
+        dir("scripts/build") {
+            deleteDir()
+        }
+
         stage 'Generate Javadocs'
         withEnv([
                 "PATH+MVN=${tool 'mvn'}/bin",
