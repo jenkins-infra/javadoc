@@ -7,6 +7,10 @@ try {
         dir("scripts/build") {
             deleteDir()
         }
+        
+        dir("build") {
+            deleteDir()
+        }
 
         stage 'Generate Javadocs'
         withEnv(["PATH+MVN=${tool 'mvn'}/bin", "JAVA_HOME=${tool 'jdk8'}", "PATH+GROOVY=${tool 'groovy'}/bin"]) {
