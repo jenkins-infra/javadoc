@@ -5,7 +5,7 @@ try {
         checkout scm
 
         stage 'Generate Javadocs'
-        withEnv(["PATH+MVN=${tool 'mvn'}/bin", "JAVA_HOME=${tool 'jdk8'}"]) {
+        withEnv(["PATH+MVN=${tool 'mvn'}/bin", "JAVA_HOME=${tool 'jdk8'}", "GROOVY_HOME=${tool 'groovy'}"]) {
             sh './scripts/generate-javadoc.sh'
         }
 
