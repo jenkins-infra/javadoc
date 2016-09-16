@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+properties([buildDiscarder(logRotator(numToKeepStr: '2'))])
+
 try {
     node {
         checkout scm
