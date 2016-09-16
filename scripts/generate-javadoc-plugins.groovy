@@ -1,24 +1,13 @@
-@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
-import groovyx.net.http.HTTPBuilder
 import groovy.json.*;
 
-String location = "http://ftp-nyc.osuosl.org/pub/jenkins/updates/current/update-center.json"
+String location = "http://updates.jenkins.io/current/update-center.actual.json"
 String pluginLocation = "https://repo.jenkins-ci.org/releases/"
-
-// HTTPBuilder for downloading the update-center.json
-HTTPBuilder http = new HTTPBuilder(location);
 
 // AntBuilder used for unzipping content
 def ant = new AntBuilder()
 
-// First we need to download the update-center.json file from Jenkins in text format
-def httpGetText = (location).toURL().getText()
-
-// We need to remove the first and last lines of the json file.
-def jsonString = httpGetText.replace("updateCenter.post(", "").replace(");", "")
-
 // Now we can inject it into the JsonSlurper to produce an object to work with
-def json = new JsonSlurper().parseText(jsonString);
+def json = new JsonSlurper().parseText(new URL (location).text);
 
 // For each plugin
 json.plugins.each {it ->
