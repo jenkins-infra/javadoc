@@ -9,35 +9,31 @@ mkdir_p $OUTPUT_DIR
 mkdir_p $SITE_DIR
 mkdir_p $ARCHIVE_DIR
 
+function generate_javadoc_core() {
+    # First we need to get the built javadocs. 
+    wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar
 
-if [ ! -d $JENKINS_DIR ]; then
-    echo ">> ${JENKINS_DIR} does not exist, cloning repository"
-    git clone https://github.com/jenkinsci/jenkins.git ${JENKINS_DIR}
-else
-    echo ">> ${JENKINS_DIR} already exists, updating refs"
-    (cd $JENKINS_DIR && git fetch --all)
-fi;
+    # We need to move the contents to a new directory to then extract the content.
+    mkdir jenkins-core-${release}
+    mv jenkins-core-${release}-javadoc.jar jenkins-core-${release}
+    cd jenkins-core-${release}
 
+    # Extract the content of the javadoc jar
+    jar -xvf jenkins-core-${release}-javadoc.jar
 
-function generate_javadoc() {
-    pushd $JENKINS_DIR
-    git clean -xf
-    git checkout $1
-    nice mvn javadoc:aggregate
-
+    # Verify that there was no error when extracting the javadocs
     if [ $? -ne 0 ]; then
         echo ">> failed to generate javadocs for ${1}"
     fi;
 
-    mv target/site/apidocs ${ARCHIVE_DIR}/${1}
-    popd
+    # Move the docs to the archive directory
+    cd .. # Leave the current directory
+    mv jenkins-core-${release} ${ARCHIVE_DIR}/${1}
 }
 
 for release in 1.554 1.565 1.580 1.596 1.609 1.625 1.642 1.651 2.7; do
     echo ">> Found release ${release}"
-    generate_javadoc "jenkins-${release}"
+    generate_javadoc_core "${release}"
 done;
 
-pushd $JENKINS_DIR
-    generate_javadoc $(git tag -l jenkins-\* | sort --version-sort --reverse | head -n 1)
-popd;
+groovy generate-javadoc-plugins.groovy
