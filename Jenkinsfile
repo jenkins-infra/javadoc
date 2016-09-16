@@ -11,7 +11,7 @@ try {
                 "PATH+MVN=${tool 'mvn'}/bin",
                 "JAVA_HOME=${tool 'jdk8'}",
                 "PATH+GROOVY=${tool 'groovy'}/bin",
-                "PATH+JAVA=${env.JAVA_HOME}/bin"
+                'PATH+JAVA=${JAVA_HOME}/bin',
             ]) {
             sh './scripts/generate-javadoc.sh'
         }
