@@ -9,6 +9,10 @@ try {
         dir("scripts/build") {
             deleteDir()
         }
+        
+        dir("build") {
+            deleteDir()
+        }
 
         stage 'Generate Javadocs'
         withEnv([
