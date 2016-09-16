@@ -1,13 +1,13 @@
 import groovy.json.*;
 
-String location = "https://updates.jenkins.io/current/update-center.actual.json"
+String location = "http://updates.jenkins.io/current/update-center.actual.json"
 String pluginLocation = "https://repo.jenkins-ci.org/releases/"
 
 // AntBuilder used for unzipping content
 def ant = new AntBuilder()
 
 // Now we can inject it into the JsonSlurper to produce an object to work with
-def json = new JsonSlurper().parseText(new URL (location).openStream());
+def json = new JsonSlurper().parseText(new URL (location).text);
 
 // For each plugin
 json.plugins.each {it ->
