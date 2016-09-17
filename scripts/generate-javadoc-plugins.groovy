@@ -27,7 +27,7 @@ json.plugins.each {it ->
     def pluginLoc  = pluginLocation + gid + "/" + aid + "/" + ver + "/" + aid + "-" + ver + "-javadoc.jar";
 
     // Define the directory as to where the plugin should be extracted to
-    def plugin_dir="build/site/archive/plugin/"+ aid + "/"
+    def plugin_dir="build/site/plugin/"+ aid + "/"
 
     // Create the directory where the plugin should exist.
     new File(plugin_dir).mkdirs();
