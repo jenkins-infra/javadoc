@@ -9,7 +9,7 @@ try {
         dir("scripts/build") {
             deleteDir()
         }
-        
+
         dir("build") {
             deleteDir()
         }

@@ -23,7 +23,16 @@ for path in $(find $LATESTDIR -type f \( -iname "*.html" ! -iname "*[-]*" \) ); 
     # path. This mostly removes the /class-use/ paths
     if [ $(expr index $relative "\-") != "0" ]; then continue; fi;
 
+    parentDir=$(basename "$(dirname $trimmed)")
     classname=$(basename $trimmed)
+
+    if [ "${parentDir}" == "hudson" ]; then
+        classname="${parentDir}.${classname}"
+    fi;
+
+    if [ "${parentDir}" == "jenkins" ]; then
+        classname="${parentDir}.${classname}"
+    fi;
 
     redirectdir=${SHORTNAMEDIR}/${classname}
     mkdir_p $redirectdir
