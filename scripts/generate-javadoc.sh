@@ -10,6 +10,7 @@ mkdir_p $SITE_DIR
 mkdir_p $ARCHIVE_DIR
 
 function generate_javadoc_core() {
+    declare release=$1
     # First we need to get the built javadocs. 
     wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar
 
@@ -23,12 +24,12 @@ function generate_javadoc_core() {
 
     # Verify that there was no error when extracting the javadocs
     if [ $? -ne 0 ]; then
-        echo ">> failed to generate javadocs for ${1}"
+        echo ">> failed to generate javadocs for ${release}"
     fi;
 
     # Move the docs to the archive directory
     cd .. # Leave the current directory
-    mv jenkins-core-${release} ${ARCHIVE_DIR}/jenkins-${1}
+    mv jenkins-core-${release} ${ARCHIVE_DIR}/jenkins-${release}
 }
 
 for release in 1.554 1.565 1.580 1.596 1.609 1.625 1.642 1.651 2.7 2.19; do
@@ -41,4 +42,4 @@ LATEST=$(wget -q -O - "https://updates.jenkins.io/current/latestCore.txt")
 echo ">> Found release ${LATEST}"
 generate_javadoc_core ${LATEST}
 
-groovy scripts/generate-javadoc-plugins.groovy
+#groovy scripts/generate-javadoc-plugins.groovy
