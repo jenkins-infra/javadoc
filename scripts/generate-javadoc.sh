@@ -28,12 +28,17 @@ function generate_javadoc_core() {
 
     # Move the docs to the archive directory
     cd .. # Leave the current directory
-    mv jenkins-core-${release} ${ARCHIVE_DIR}/${1}
+    mv jenkins-core-${release} ${ARCHIVE_DIR}/jenkins-${1}
 }
 
 for release in 1.554 1.565 1.580 1.596 1.609 1.625 1.642 1.651 2.7 2.19; do
     echo ">> Found release ${release}"
     generate_javadoc_core "${release}"
 done;
+
+LATEST=$(wget -q -O - "https://updates.jenkins.io/current/latestCore.txt")
+
+echo ">> Found release ${LATEST}"
+generate_javadoc_core ${LATEST}
 
 groovy scripts/generate-javadoc-plugins.groovy
