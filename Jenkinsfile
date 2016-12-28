@@ -1,9 +1,12 @@
 #!/usr/bin/env groovy
 
-properties([buildDiscarder(logRotator(numToKeepStr: '2'))])
+properties([
+    buildDiscarder(logRotator(numToKeepStr: '2')),
+    pipelineTriggers([cron('15 3 * * 0')]),
+])
 
 try {
-    node {
+    node('linux') {
         checkout scm
 
         dir("scripts/build") {
@@ -14,30 +17,35 @@ try {
             deleteDir()
         }
 
-        stage 'Generate Javadocs'
-        withEnv([
-                "PATH+MVN=${tool 'mvn'}/bin",
-                "JAVA_HOME=${tool 'jdk8'}",
-                "PATH+GROOVY=${tool 'groovy'}/bin",
-                'PATH+JAVA=${JAVA_HOME}/bin',
-            ]) {
-            sh './scripts/generate-javadoc.sh'
+        stage('Generate Javadocs') {
+            withEnv([
+                    "PATH+MVN=${tool 'mvn'}/bin",
+                    "JAVA_HOME=${tool 'jdk8'}",
+                    "PATH+GROOVY=${tool 'groovy'}/bin",
+                    'PATH+JAVA=${JAVA_HOME}/bin',
+                ]) {
+                sh './scripts/generate-javadoc.sh'
+            }
         }
 
-        stage 'Generate Shortnames'
-        sh './scripts/generate-shortnames.sh'
+        stage('Generate Shortnames') {
+            sh './scripts/generate-shortnames.sh'
+        }
 
-        stage 'Prepare Latest'
-        sh './scripts/default-to-latest.sh'
+        stage('Prepare Latest') {
+            sh './scripts/default-to-latest.sh'
+        }
 
-        stage 'Archive'
-        sh 'cd build && tar -cjf javadoc-site.tar.bz2 site'
-        archive 'build/*.tar.bz2'
+        stage('Archive') {
+            sh 'cd build && tar -cjf javadoc-site.tar.bz2 site'
+            archive 'build/*.tar.bz2'
+        }
 
-        stage 'Clean up'
-        echo 'We want to generate fresh javadocs on each run'
-        dir('build/site') {
-            deleteDir()
+        stage('Clean up') {
+            echo 'We want to generate fresh javadocs on each run'
+            dir('build/site') {
+                deleteDir()
+            }
         }
     }
 }
