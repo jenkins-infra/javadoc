@@ -2,8 +2,9 @@
 
 source "$(dirname $0)/common.sh"
 
-ensure_bin 'mvn'
-ensure_bin 'git'
+ensure_bin 'wget'
+ensure_bin 'jar'
+ensure_bin 'groovy'
 
 mkdir_p $OUTPUT_DIR
 mkdir_p $SITE_DIR
