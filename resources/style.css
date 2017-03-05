@@ -1,0 +1,32 @@
+.missing {
+	color: #999;
+}
+
+a {
+	color: #339;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #66c;
+}
+
+body {
+	font-family: sans-serif;
+}
+
+.version {
+	font-size: small;
+	padding-left: 10px;
+	vertical-align: top;
+}
+
+div {
+	float: left;
+	width: 400px;
+	height: 200px;
+	padding: 20px;
+	margin: 20px;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+}
