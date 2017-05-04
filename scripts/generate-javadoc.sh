@@ -33,7 +33,7 @@ function generate_javadoc_core() {
     mv jenkins-core-${release} ${ARCHIVE_DIR}/jenkins-${release}
 }
 
-for release in 1.554 1.565 1.580 1.596 1.609 1.625 1.642 1.651 2.7 2.19 2.32; do
+for release in 1.554 1.565 1.580 1.596 1.609 1.625 1.642 1.651 2.7 2.19 2.32 2.46; do
     echo ">> Found release ${release}"
     generate_javadoc_core "${release}"
 done;
