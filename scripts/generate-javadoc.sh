@@ -33,11 +33,20 @@ function generate_javadoc_core() {
     mv jenkins-core-${release} ${ARCHIVE_DIR}/jenkins-${release}
 }
 
-# When adding or removing releases, perform the corresponding change on jenkins.io:
-# https://github.com/jenkins-infra/jenkins.io/blob/802028f1c3b0ff36e64de50a85e6ea5f425e0ed6/content/_layouts/developer.html.haml#L63
-for release in 1.554 1.565 1.580 1.596 1.609 1.625 1.642 1.651 2.7 2.19 2.32 2.46 2.60; do
-    echo ">> Found release ${release}"
-    generate_javadoc_core "${release}"
+
+wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 || { echo "Failed to download jq" >&2 ; exit 1; }
+chmod +x jq || { echo "Failed to make jq executable" >&2 ; exit 1; }
+
+set -o pipefail
+
+RELEASES=$( curl 'https://repo.jenkins-ci.org/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.1' | ./jq --raw-output '.results[].version' | head -n 10 ) || { echo "Failed to retrieve list of releases" >&2 ; exit 1 ; }
+
+
+set +o pipefail
+
+for release in $RELEASES ; do
+    echo ">> Found release ${release/%.1/}"
+    generate_javadoc_core "${release/%.1/}"
 done;
 
 LATEST=$(wget -q -O - "https://updates.jenkins.io/current/latestCore.txt")
