@@ -3,7 +3,7 @@ import groovy.json.*;
 String location = "http://updates.jenkins.io/current/update-center.actual.json"
 String pluginLocation = "https://repo.jenkins-ci.org/releases/"
 
-String baseUrl = "https://javadoc.jenkins.io/plugin/"
+String baseUrl = "http://javadoc.jenkins.io/plugin/"
 
 // AntBuilder used for unzipping content
 def ant = new AntBuilder()
