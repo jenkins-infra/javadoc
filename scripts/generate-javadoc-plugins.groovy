@@ -3,6 +3,8 @@ import groovy.json.*;
 String location = "http://updates.jenkins.io/current/update-center.actual.json"
 String pluginLocation = "https://repo.jenkins-ci.org/releases/"
 
+String baseUrl = "https://javadoc.jenkins.io/plugin/"
+
 // AntBuilder used for unzipping content
 def ant = new AntBuilder()
 
@@ -15,6 +17,9 @@ indexHtml << '<meta http-equiv="content-type" content="text/html; charset=UTF-8"
 indexHtml << '<link rel="stylesheet" type="text/css" href="style.css"/>'
 indexHtml << '<script src="script.js"></script>'
 indexHtml << '</head><body>'
+
+def indexJson = new groovy.json.JsonBuilder()
+def jsonUrlMap = [:]
 
 // define sort order for plugins
 def keyComparator = [compare: { e1, e2 -> e1.key.compareToIgnoreCase(e2.key) }] as Comparator
@@ -33,7 +38,7 @@ json.plugins.toSorted(keyComparator).collect { k, v -> v }.eachWithIndex { value
     ver = gav[2]
 
     // The plugin location is defined as:
-    // "https://repo.jenkins-ci.org/releases/artifact/id/version/artifactID-version-javadoc.jar"
+    // "https://repo.jenkins-ci.org/releases/groupWithSlashes/artifactId/version/artifactId-version-javadoc.jar"
     def pluginLoc  = pluginLocation + gid + "/" + aid + "/" + ver + "/" + aid + "-" + ver + "-javadoc.jar";
 
     // Define the directory as to where the plugin should be extracted to
@@ -63,6 +68,7 @@ json.plugins.toSorted(keyComparator).collect { k, v -> v }.eachWithIndex { value
                 overwrite:true)
 
         indexHtml << "<div id='${id}'><h2><a href='${id}'>${name}</a><span class='version'>${version}</span></h2><p><tt>${id}</tt></p><p><a href='${id}'>Javadoc</a></p><p><a href='https://plugins.jenkins.io/${id}'>Plugin Information</a></p></div>"
+        jsonUrlMap[id] = [url: baseUrl + id]
     } catch (FileNotFoundException e) {
 
         // This will only be encountered if there is no javadocs in our repo. We can safely move on.
@@ -76,6 +82,9 @@ json.plugins.toSorted(keyComparator).collect { k, v -> v }.eachWithIndex { value
 // white index.html file with nicer looking list of links to plugins
 indexHtml << '</body></html>'
 new File("build/site/plugin/index.html").text = indexHtml
+
+indexJson jsonUrlMap
+new File("build/site/plugin/index.json").text = indexJson.toString()
 
 // copy CSS anf JS into output
 new File("build/site/plugin/style.css").text = new File("resources/style.css").text
