@@ -5,6 +5,7 @@ source "$(dirname $0)/common.sh"
 ensure_bin 'wget'
 ensure_bin 'jar'
 ensure_bin 'groovy'
+ensure_bin 'curl'
 
 mkdir_p $OUTPUT_DIR
 mkdir_p $SITE_DIR
@@ -39,12 +40,14 @@ chmod +x jq || { echo "Failed to make jq executable" >&2 ; exit 1; }
 
 set -o pipefail
 
-RELEASES=$( curl 'https://repo.jenkins-ci.org/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.1' | ./jq --raw-output '.results[].version' | head -n 10 ) || { echo "Failed to retrieve list of releases" >&2 ; exit 1 ; }
-
+if [ -z "${LTS_RELEASES}" ] ; then
+    echo "LTS_RELEASES is not defined. Pulling all releases from Jenkins Artifactory"
+    LTS_RELEASES=$( curl 'https://repo.jenkins-ci.org/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.1' | ./jq --raw-output '.results[].version' | head -n 10 ) || { echo "Failed to retrieve list of releases" >&2 ; exit 1 ; }
+fi
 
 set +o pipefail
 
-for release in $RELEASES ; do
+for release in $LTS_RELEASES ; do
     echo ">> Found release ${release/%.1/}"
     generate_javadoc_core "${release/%.1/}"
 done;
@@ -54,4 +57,4 @@ LATEST=$(wget -q -O - "https://updates.jenkins.io/current/latestCore.txt")
 echo ">> Found release ${LATEST}"
 generate_javadoc_core ${LATEST}
 
-groovy scripts/generate-javadoc-plugins.groovy
+groovy scripts/generate-javadoc-plugins.groovy "${PLUGINS}"

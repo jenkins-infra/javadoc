@@ -24,6 +24,20 @@ def jsonUrlMap = [:]
 // define sort order for plugins
 def keyComparator = [compare: { e1, e2 -> e1.key.compareToIgnoreCase(e2.key) }] as Comparator
 
+Set<String> pluginsAIDs = null;
+if (args.length > 0 && !args[0].trim().empty) {
+    println "Args: ${args.length}, values=${args}"
+    if (pluginsAIDs == null) {
+        pluginsAIDs = new HashSet<>(args.length)
+    }
+
+    def argPluginIDs = args[0].split()
+    for (def pluginID : argPluginIDs) {
+        pluginsAIDs.add(pluginID)
+    }
+    println "Plugins to be published: ${argPluginIDs.join(",")}"
+}
+
 // For each plugin
 json.plugins.toSorted(keyComparator).collect { k, v -> v }.eachWithIndex { value, idx ->
 
@@ -36,6 +50,12 @@ json.plugins.toSorted(keyComparator).collect { k, v -> v }.eachWithIndex { value
     // Get the artifactID and version number as well.
     aid = gav[1]
     ver = gav[2]
+
+    if (pluginsAIDs != null && !pluginsAIDs.contains(aid)) {
+        //TODO: TOO much logging? println "Skipping plugin ${aid}"
+        return
+    }
+    println "Publishing plugin ${aid}"
 
     // The plugin location is defined as:
     // "https://repo.jenkins-ci.org/releases/groupWithSlashes/artifactId/version/artifactId-version-javadoc.jar"

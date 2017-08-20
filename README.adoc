@@ -1,4 +1,46 @@
 = Jenkins Javadocs
 
 This repository contains the scripts necessary to generate javadocs for
-publication inside of the jenkins.io infrastructure
+publication inside of the jenkins.io infrastructure.
+
+Production site is published link:http://javadoc.jenkins.io/[here].
+
+## Structure
+
+* Root `index.html` lists Javadoc of the Jenkins Weekly release
+* Plugin javadoc index can be found at `plugin/`
+* LTS Javadocs can be accessed using links like `archive/jenkins-2.60/`
+
+## Development
+
+The repository offers a `Dockerfile`,
+which can be used for running the build and verifying results.
+
+### Building image
+
+Build command:
+
+```shell
+docker build -t jenkinsinfra/javadoc-dev --build-arg LTS_RELEASES=2.60 --build-arg PLUGINS="git git-client github" .
+```
+
+Optional arguments:
+
+* `LTS_RELEASES` - list of LTS releases to be published
+** Example: "2.46 2.60"
+** Default: all LTS lines returned by link:https://repo.jenkins-ci.org[Jenkins Artifactory]
+** Javadoc for the latest weekly will be published anyway
+* `PLUGINS` - list of plugins to be published
+** Example: "git github git-client"
+** Default: all plugins by the default Jenkins update site
+
+### Running image
+
+Run command:
+
+```shell
+docker run --rm -p 8080:80 jenkinsinfra/javadoc-dev
+```
+
+After starting the image the update site will be available at `DOCKER_HOST:8080`,
+so you will be able to browse the contents similarly tolink:http://javadoc.jenkins.io/[Jenkins Javadoc].
