@@ -31,7 +31,7 @@ if (args.length > 0 && !args[0].trim().empty) {
         pluginsAIDs = new HashSet<>(args.length)
     }
 
-    def argPluginIDs = args[0].split()
+    def argPluginIDs = args[0].trim().split("[\\s,]+")
     for (def pluginID : argPluginIDs) {
         pluginsAIDs.add(pluginID)
     }
