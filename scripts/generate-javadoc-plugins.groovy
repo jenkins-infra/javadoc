@@ -87,13 +87,13 @@ json.plugins.toSorted(keyComparator).collect { k, v -> v }.eachWithIndex { value
                 dest:plugin_dir,
                 overwrite:true)
 
-        indexHtml << "<div id='${id}'><h2><a href='${id}'>${name}</a><span class='version'>${version}</span></h2><p><tt>${id}</tt></p><p><a href='${id}'>Javadoc</a></p><p><a href='https://plugins.jenkins.io/${id}'>Plugin Information</a></p></div>"
+        indexHtml << "<div id='${id}'><h2><a href='${id}/'>${name}</a><span class='version'>${version}</span></h2><p><tt>${id}</tt></p><p><a href='${id}/'>Javadoc</a></p><p><a href='https://plugins.jenkins.io/${id}/'>Plugin Information</a></p></div>"
         jsonUrlMap[id] = [url: baseUrl + id]
     } catch (FileNotFoundException e) {
 
         // This will only be encountered if there is no javadocs in our repo. We can safely move on.
         println "No javadoc found for: " + aid
-        indexHtml << "<div id='${id}' class='missing'><h2>${name}<span class='version'>${version}</span></h2><p><tt>${id}</tt></p><p>No Javadoc has been published for this plugin.</p><p><a href='https://plugins.jenkins.io/${id}'>Plugin Information</a></p></div>"
+        indexHtml << "<div id='${id}' class='missing'><h2>${name}<span class='version'>${version}</span></h2><p><tt>${id}</tt></p><p>No Javadoc has been published for this plugin.</p><p><a href='https://plugins.jenkins.io/${id}/'>Plugin Information</a></p></div>"
     } finally {
         fos.close();
     }
