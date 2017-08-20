@@ -57,4 +57,4 @@ LATEST=$(wget -q -O - "https://updates.jenkins.io/current/latestCore.txt")
 echo ">> Found release ${LATEST}"
 generate_javadoc_core ${LATEST}
 
-groovy scripts/generate-javadoc-plugins.groovy "${PLUGINS}"
+groovy -cp src/main/groovy scripts/generate-javadoc-plugins.groovy "${PLUGINS}"
