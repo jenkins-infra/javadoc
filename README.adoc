@@ -7,9 +7,14 @@ Production site is published link:http://javadoc.jenkins.io/[here].
 
 ## Structure
 
-* Root `index.html` lists Javadoc of the Jenkins Weekly release
-* Plugin javadoc index can be found at `plugin/`
-* LTS Javadocs can be accessed using links like `archive/jenkins-2.60/`
+* root - `index.html` lists Javadoc of the Jenkins Weekly release
+* `archive/jenkins-2.60/` - Javadocs for the recent LTS releases
+* `/plugin/` - Plugin javadoc index can be found at `plugin/`
+* `/module/` - Indexes for Jenkins Core modules: `module/`
+** Currently the site lists latest versions of modules.
+Effective versions in the latest core release may differ.
+* `/component/` - Jenkins components and libraries
+** This section does not contain a full list of components so far
 
 ## Development
 

@@ -12,7 +12,7 @@ components.addAll(Arrays.asList(
 
 
 // For each plugin located in the update center
-def indexBuilder = new JavadocGroupBuilder("component", "component", "Jenkins Componentss Javadoc");
+def indexBuilder = new JavadocGroupBuilder("component", "component", "Jenkins Components Javadoc");
 components.toSorted(keyComparator).eachWithIndex { value, idx ->
     indexBuilder.withArtifact(value)
 }
