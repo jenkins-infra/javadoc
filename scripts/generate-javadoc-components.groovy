@@ -5,6 +5,8 @@ def keyComparator = [compare: { e1, e2 -> e1.name.compareToIgnoreCase(e2.name) }
 
 def components = new ArrayList<Artifact>();
 components.addAll(Arrays.asList(
+    new Artifact("Acceptance Test Harness", "org.jenkins-ci", "acceptance-test-harness", null, "https://github.com/jenkinsci/acceptance-test-harness"),
+    new Artifact("Docker fixtures", "org.jenkins-ci.test", "docker-fixtures", null, "https://github.com/jenkinsci/docker-fixtures"),
     new Artifact("GitHub API", "org.kohsuke", "github-api", null, "http://github-api.kohsuke.org/"),
     new Artifact("Jenkins Test Harness", "org.jenkins-ci.main", "jenkins-test-harness", null, "https://github.com/jenkinsci/jenkins-test-harness"),
     new Artifact("Remoting", "org.jenkins-ci.main", "remoting", null, "https://github.com/jenkinsci/remoting"),
