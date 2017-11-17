@@ -1,20 +1,15 @@
 = Jenkins Javadocs
 
 This repository contains the scripts necessary to generate javadocs for
-publication inside of the jenkins.io infrastructure.
+publication to the jenkins.io infrastructure.
 
-Production site is published link:http://javadoc.jenkins.io/[here].
+The link:http://javadoc.jenkins.io/[jenkins.io production site] includes:
 
-## Structure
-
-* root - `index.html` lists Javadoc of the Jenkins Weekly release
-* `archive/jenkins-2.60/` - Javadocs for the recent LTS releases
-* `/plugin/` - Plugin javadoc index can be found at `plugin/`
-* `/module/` - Indexes for Jenkins Core modules: `module/`
-** Currently the site lists latest versions of modules.
-Effective versions in the latest core release may differ.
-* `/component/` - Jenkins components and libraries
-** This section does not contain a full list of components so far
+* link:http://javadoc.jenkins.io/[Root Javadoc] for Jenkins Weekly release
+* link:http://javadoc.jenkins.io//plugin[Plugin Javadoc] for many Jenkins plugins
+* link:http://javadoc.jenkins.io/module[Module Javadoc] for _latest_ versions of Jenkins Core modules (Jenkins releases may use earlier versions)
+* link:http://javadoc.jenkins.io/component[Component Javadoc] for Jenkins components and libraries (currently a partial list of components)
+* link:http://javadoc.jenkins.io/archive[Archive Javadoc] for past Jenkins releases
 
 ## Development
 
@@ -26,13 +21,13 @@ which can be used for running the build and verifying results.
 Build command:
 
 ```shell
-docker build -t jenkinsinfra/javadoc-dev --build-arg LTS_RELEASES=2.60 --build-arg PLUGINS="git git-client github" .
+docker build -t jenkinsinfra/javadoc-dev --build-arg LTS_RELEASES=2.73 --build-arg PLUGINS="credentials git git-client" .
 ```
 
 Optional arguments:
 
 * `LTS_RELEASES` - list of LTS releases to be published
-** Example: "2.46 2.60"
+** Example: "2.60 2.73"
 ** Default: all LTS lines returned by link:https://repo.jenkins-ci.org[Jenkins Artifactory]
 ** Javadoc for the latest weekly will be published anyway
 * `PLUGINS` - list of plugins to be published
@@ -44,8 +39,8 @@ Optional arguments:
 Run command:
 
 ```shell
-docker run --rm -p 8080:80 jenkinsinfra/javadoc-dev
+docker run --rm -p 9090:80 jenkinsinfra/javadoc-dev
 ```
 
-After starting the image the update site will be available at `DOCKER_HOST:8080`,
-so you will be able to browse the contents similarly tolink:http://javadoc.jenkins.io/[Jenkins Javadoc].
+After starting the image the update site will be available at `DOCKER_HOST:9090`,
+so you will be able to browse the contents similarly to link:http://javadoc.jenkins.io/[Jenkins Javadoc].
