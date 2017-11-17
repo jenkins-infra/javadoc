@@ -21,7 +21,7 @@ which can be used for running the build and verifying results.
 Build command:
 
 ```shell
-docker build -t jenkinsinfra/javadoc-dev --build-arg LTS_RELEASES=2.73 --build-arg PLUGINS="git git-client github" .
+docker build -t jenkinsinfra/javadoc-dev --build-arg LTS_RELEASES=2.73 --build-arg PLUGINS="credentials git git-client" .
 ```
 
 Optional arguments:
