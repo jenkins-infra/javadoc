@@ -6,10 +6,10 @@ publication to the jenkins.io infrastructure.
 The link:http://javadoc.jenkins.io/[production site] includes:
 
 * link:http://javadoc.jenkins.io/[Root Javadoc] for Jenkins Weekly release
-* link:http://javadoc.jenkins.io/archive[Archive Javadoc] for past Jenkins releases
 * link:http://javadoc.jenkins.io//plugin[Plugin Javadoc] for many Jenkins plugins
 * link:http://javadoc.jenkins.io/module[Module Javadoc] for latest versions of Jenkins Core modules
 * link:http://javadoc.jenkins.io/component[Component Javadoc] for Jenkins components and libraries
+* link:http://javadoc.jenkins.io/archive[Archive Javadoc] for past Jenkins releases
 
 ## Development
 
