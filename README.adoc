@@ -3,7 +3,7 @@
 This repository contains the scripts necessary to generate javadocs for
 publication to the jenkins.io infrastructure.
 
-The link:http://javadoc.jenkins.io/[production site] includes:
+The link:http://javadoc.jenkins.io/[jenkins.io production site] includes:
 
 * link:http://javadoc.jenkins.io/[Root Javadoc] for Jenkins Weekly release
 * link:http://javadoc.jenkins.io//plugin[Plugin Javadoc] for many Jenkins plugins
