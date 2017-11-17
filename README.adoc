@@ -48,4 +48,4 @@ docker run --rm -p 8080:80 jenkinsinfra/javadoc-dev
 ```
 
 After starting the image the update site will be available at `DOCKER_HOST:8080`,
-so you will be able to browse the contents similarly tolink:http://javadoc.jenkins.io/[Jenkins Javadoc].
+so you will be able to browse the contents similarly to link:http://javadoc.jenkins.io/[Jenkins Javadoc].
