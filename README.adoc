@@ -39,8 +39,8 @@ Optional arguments:
 Run command:
 
 ```shell
-docker run --rm -p 8080:80 jenkinsinfra/javadoc-dev
+docker run --rm -p 9090:80 jenkinsinfra/javadoc-dev
 ```
 
-After starting the image the update site will be available at `DOCKER_HOST:8080`,
+After starting the image the update site will be available at `DOCKER_HOST:9090`,
 so you will be able to browse the contents similarly to link:http://javadoc.jenkins.io/[Jenkins Javadoc].
