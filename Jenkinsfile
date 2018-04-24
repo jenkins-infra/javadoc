@@ -41,6 +41,17 @@ try {
             archive 'build/*.tar.bz2'
         }
 
+        if (infra.isTrusted()){
+          stage('Publish on Azure') {
+              /* -> https://github.com/Azure/blobxfer
+              Require credential 'JAVADOC_STORAGEACCOUNTKEY' set to the storage account key */
+            withCredentials([string(credentialsId: 'JAVADOC_STORAGEACCOUNTKEY', variable: 'JAVADOC_STORAGEACCOUNTKEY')]) {
+              sh './scripts/blobxfer upload --local-path /data/build/site --storage-account-key $JAVADOC_STORAGEACCOUNTKEY --storage-account prodjavadoc --remote-path javadoc --recursive --mode file --skip-on-md5-match --file-md5'
+            }
+          }
+        }
+
+
         stage('Clean up') {
             echo 'We want to generate fresh javadocs on each run'
             dir('build/site') {
