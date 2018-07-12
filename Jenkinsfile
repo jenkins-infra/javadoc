@@ -46,7 +46,17 @@ try {
               /* -> https://github.com/Azure/blobxfer
               Require credential 'JAVADOC_STORAGEACCOUNTKEY' set to the storage account key */
             withCredentials([string(credentialsId: 'JAVADOC_STORAGEACCOUNTKEY', variable: 'JAVADOC_STORAGEACCOUNTKEY')]) {
-              sh './scripts/blobxfer upload --local-path /data/build/site --storage-account-key $JAVADOC_STORAGEACCOUNTKEY --storage-account prodjavadoc --remote-path javadoc --recursive --mode file --skip-on-md5-match --file-md5'
+              sh './scripts/blobxfer upload \
+                --local-path /data/site \
+                --storage-account-key $JAVADOC_STORAGEACCOUNTKEY \
+                --storage-account prodjavadoc \
+                --remote-path javadoc \
+                --recursive \
+                --mode file \
+                --skip-on-md5-match \
+                --file-md5 \
+                --connect-timeout 30 \
+                --delete'
             }
           }
         }
