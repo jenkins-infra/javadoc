@@ -14,7 +14,7 @@ mkdir_p $ARCHIVE_DIR
 function generate_javadoc_core() {
     declare release=$1
     # First we need to get the built javadocs. 
-    wget https://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar
+    wget --no-verbose https://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar
 
     # We need to move the contents to a new directory to then extract the content.
     mkdir jenkins-core-${release}
@@ -22,7 +22,7 @@ function generate_javadoc_core() {
     cd jenkins-core-${release}
 
     # Extract the content of the javadoc jar
-    jar -xvf jenkins-core-${release}-javadoc.jar
+    jar -xf jenkins-core-${release}-javadoc.jar
 
     # Verify that there was no error when extracting the javadocs
     if [ $? -ne 0 ]; then
@@ -35,7 +35,7 @@ function generate_javadoc_core() {
 }
 
 
-wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 || { echo "Failed to download jq" >&2 ; exit 1; }
+wget --no-verbose -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 || { echo "Failed to download jq" >&2 ; exit 1; }
 chmod +x jq || { echo "Failed to make jq executable" >&2 ; exit 1; }
 
 set -o pipefail
