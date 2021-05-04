@@ -10,6 +10,7 @@ components.addAll(Arrays.asList(
     new Artifact("GitHub API", "org.kohsuke", "github-api", null, "http://github-api.kohsuke.org/"),
     new Artifact("Jenkins Test Harness", "org.jenkins-ci.main", "jenkins-test-harness", null, "https://github.com/jenkinsci/jenkins-test-harness"),
     new Artifact("Remoting", "org.jenkins-ci.main", "remoting", null, "https://github.com/jenkinsci/remoting"),
+    new Artifact("Stapler", "org.kohsuke.stapler", "stapler", null, "https://github.com/stapler/stapler"),
     new Artifact("Version Number Lib", "org.jenkins-ci", "version-number", null, "https://github.com/jenkinsci/lib-version-number"),
     new Artifact("Crypto Util Lib", "org.jenkins-ci", "crypto-util", null, "https://github.com/jenkinsci/lib-crypto-util"),
     new Artifact("Annotation Indexer Lib", "org.jenkins-ci", "annotation-indexer", null, "https://github.com/jenkinsci/lib-annotation-indexer"),

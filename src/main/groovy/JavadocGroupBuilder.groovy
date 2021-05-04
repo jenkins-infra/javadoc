@@ -14,7 +14,7 @@ public class JavadocGroupBuilder {
 
     public JavadocGroupBuilder(String path, String artifactType, String title,
                                Set<String> artifactIDs = null,
-                               String pluginLocation = "https://repo.jenkins-ci.org/releases/"
+                               String pluginLocation = "https://repo.jenkins-ci.org/public/"
                                ) {
         this.path = path
         this.artifactType = artifactType
@@ -44,8 +44,8 @@ public class JavadocGroupBuilder {
 
         def repoUrl = pluginLocation + gid + "/" + id + "/"
         if (version == null) {
-            println "Version is not defined, reading latest from Maven metadata"
             def metadataURL = repoUrl + "maven-metadata.xml"
+            println "Version is not defined, reading latest from ${metadataURL}"
             def metadata = new XmlSlurper().parseText(new URL (metadataURL).text)
             version = metadata.versioning.latest
             if (version != null && !version.trim().empty) {
@@ -56,7 +56,7 @@ public class JavadocGroupBuilder {
         }
 
         // The plugin location is defined as:
-        // "https://repo.jenkins-ci.org/releases/groupWithSlashes/artifactId/version/artifactId-version-javadoc.jar"
+        // "https://repo.jenkins-ci.org/public/groupWithSlashes/artifactId/version/artifactId-version-javadoc.jar"
         def pluginLoc  = repoUrl + version + "/" + id + "-" + version + "-javadoc.jar";
 
         // Define the directory as to where the plugin should be extracted to
