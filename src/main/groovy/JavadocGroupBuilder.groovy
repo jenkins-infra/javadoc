@@ -14,7 +14,7 @@ public class JavadocGroupBuilder {
 
     public JavadocGroupBuilder(String path, String artifactType, String title,
                                Set<String> artifactIDs = null,
-                               String pluginLocation = "https://repo.jenkins-ci.org/public/"
+                               String pluginLocation = "https://repo.jenkins-ci.org/releases/"
                                ) {
         this.path = path
         this.artifactType = artifactType
@@ -56,7 +56,7 @@ public class JavadocGroupBuilder {
         }
 
         // The plugin location is defined as:
-        // "https://repo.jenkins-ci.org/public/groupWithSlashes/artifactId/version/artifactId-version-javadoc.jar"
+        // "https://repo.jenkins-ci.org/releases/groupWithSlashes/artifactId/version/artifactId-version-javadoc.jar"
         def pluginLoc  = repoUrl + version + "/" + id + "-" + version + "-javadoc.jar";
 
         // Define the directory as to where the plugin should be extracted to
