@@ -9,6 +9,8 @@ SHORTNAMEDIR=${SITE_DIR}/byShortName
 
 mkdir_p $SHORTNAMEDIR
 
+set +x
+
 # Find all the files that look like class files, i.e. .html files without
 # dashes (e.g. index-all.html)
 for path in $(find $LATESTDIR -type f \( -iname "*.html" ! -iname "*[-]*" \) ); do
@@ -35,7 +37,7 @@ for path in $(find $LATESTDIR -type f \( -iname "*.html" ! -iname "*[-]*" \) ); 
     fi;
 
     redirectdir=${SHORTNAMEDIR}/${classname}
-    mkdir_p $redirectdir
+    mkdir -p $redirectdir
 
     cat > $redirectdir/index.html <<EOF
 <html>
