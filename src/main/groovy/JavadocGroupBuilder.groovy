@@ -44,8 +44,8 @@ public class JavadocGroupBuilder {
 
         def repoUrl = pluginLocation + gid + "/" + id + "/"
         if (version == null) {
-            println "Version is not defined, reading latest from Maven metadata"
             def metadataURL = repoUrl + "maven-metadata.xml"
+            println "Version is not defined, reading latest from ${metadataURL}"
             def metadata = new XmlSlurper().parseText(new URL (metadataURL).text)
             version = metadata.versioning.latest
             if (version != null && !version.trim().empty) {
