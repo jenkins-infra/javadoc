@@ -7,7 +7,6 @@ The link:http://javadoc.jenkins.io/[jenkins.io production site] includes:
 
 * link:http://javadoc.jenkins.io/[Root Javadoc] for Jenkins Weekly release
 * link:http://javadoc.jenkins.io//plugin[Plugin Javadoc] for many Jenkins plugins
-* link:http://javadoc.jenkins.io/module[Module Javadoc] for _latest_ versions of Jenkins Core modules (Jenkins releases may use earlier versions)
 * link:http://javadoc.jenkins.io/component[Component Javadoc] for Jenkins components and libraries (currently a partial list of components)
 * link:http://javadoc.jenkins.io/archive[Archive Javadoc] for past Jenkins releases
 

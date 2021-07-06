@@ -62,4 +62,3 @@ generate_javadoc_core ${LATEST}
 groovy -cp src/main/groovy scripts/generate-javadoc-plugins.groovy "${PLUGINS}"
 # TODO: "libs" would be ideal, but this entry is already full of garbage files
 groovy -cp src/main/groovy scripts/generate-javadoc-components.groovy
-groovy -cp src/main/groovy scripts/generate-javadoc-modules.groovy
