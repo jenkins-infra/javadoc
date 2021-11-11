@@ -12,6 +12,7 @@ components.addAll(Arrays.asList(
     new Artifact("Test Annotations", "org.jenkins-ci", "test-annotations", null, "https://github.com/jenkinsci/lib-test-annotations"),
     new Artifact("Remoting", "org.jenkins-ci.main", "remoting", null, "https://github.com/jenkinsci/remoting"),
     new Artifact("Stapler", "org.kohsuke.stapler", "stapler", null, "https://github.com/stapler/stapler"),
+    new Artifact("Task Reactor Lib", "org.jenkins-ci", "task-reactor", null, "https://github.com/jenkinsci/lib-task-reactor"),
     new Artifact("Version Number Lib", "org.jenkins-ci", "version-number", null, "https://github.com/jenkinsci/lib-version-number"),
     new Artifact("Crypto Util Lib", "org.jenkins-ci", "crypto-util", null, "https://github.com/jenkinsci/lib-crypto-util"),
     new Artifact("Annotation Indexer Lib", "org.jenkins-ci", "annotation-indexer", null, "https://github.com/jenkinsci/lib-annotation-indexer")
