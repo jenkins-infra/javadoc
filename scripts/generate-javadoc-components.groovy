@@ -11,6 +11,7 @@ components.addAll(Arrays.asList(
     new Artifact("GitHub API", "org.kohsuke", "github-api", null, "http://github-api.kohsuke.org/"),
     new Artifact("Jenkins Test Harness", "org.jenkins-ci.main", "jenkins-test-harness", null, "https://github.com/jenkinsci/jenkins-test-harness"),
     new Artifact("Test Annotations", "org.jenkins-ci", "test-annotations", null, "https://github.com/jenkinsci/lib-test-annotations"),
+    new Artifact("Memory Monitor Lib", "org.jenkins-ci", "memory-monitor", null, "https://github.com/jenkinsci/extras-memory-monitor"),
     new Artifact("Remoting", "org.jenkins-ci.main", "remoting", null, "https://github.com/jenkinsci/remoting"),
     new Artifact("Stapler", "org.kohsuke.stapler", "stapler", null, "https://github.com/stapler/stapler"),
     new Artifact("Version Number Lib", "org.jenkins-ci", "version-number", null, "https://github.com/jenkinsci/lib-version-number"),
