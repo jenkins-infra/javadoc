@@ -21,6 +21,7 @@ components.addAll(Arrays.asList(
     new Artifact("Access Modifier Annotation", "org.jenkins-ci", "access-modifier-annotation", null, "https://github.com/jenkinsci/lib-access-modifier"),
     new Artifact("Access Modifier Checker", "org.jenkins-ci", "access-modifier-checker", null, "https://github.com/jenkinsci/lib-access-modifier"),
     new Artifact("Access Modifier Suppressions", "org.jenkins-ci", "access-modifier-suppressions", null, "https://github.com/jenkinsci/lib-access-modifier"),
+    new Artifact("Commons Jelly", "org.jenkins-ci", "commons-jelly", null, "https://github.com/jenkinsci/jelly"),
     new Artifact("Mock JavaMail", "org.jvnet.mock-javamail", "mock-javamail", null, "https://github.com/jenkinsci/lib-mock-javamail"),
     new Artifact("Support Log Formatter", "io.jenkins.lib", "support-log-formatter", null, "https://github.com/jenkinsci/lib-support-log-formatter"),
     new Artifact("Symbol Annotation", "org.jenkins-ci", "symbol-annotation", null, "https://github.com/jenkinsci/lib-symbol-annotation")
