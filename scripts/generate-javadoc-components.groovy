@@ -24,7 +24,8 @@ components.addAll(Arrays.asList(
     new Artifact("Commons Jelly", "org.jenkins-ci", "commons-jelly", null, "https://github.com/jenkinsci/jelly"),
     new Artifact("Mock JavaMail", "org.jvnet.mock-javamail", "mock-javamail", null, "https://github.com/jenkinsci/lib-mock-javamail"),
     new Artifact("Support Log Formatter", "io.jenkins.lib", "support-log-formatter", null, "https://github.com/jenkinsci/lib-support-log-formatter"),
-    new Artifact("Symbol Annotation", "org.jenkins-ci", "symbol-annotation", null, "https://github.com/jenkinsci/lib-symbol-annotation")
+    new Artifact("Symbol Annotation", "org.jenkins-ci", "symbol-annotation", null, "https://github.com/jenkinsci/lib-symbol-annotation"),
+    new Artifact("Winstone", "org.jenkins-ci", "winstone", null, "https://github.com/jenkinsci/winstone")
 ))
 
 
