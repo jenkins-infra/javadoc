@@ -8,6 +8,7 @@ components.addAll(Arrays.asList(
     new Artifact("Acceptance Test Harness", "org.jenkins-ci", "acceptance-test-harness", null, "https://github.com/jenkinsci/acceptance-test-harness"),
     new Artifact("Docker fixtures", "org.jenkins-ci.test", "docker-fixtures", null, "https://github.com/jenkinsci/docker-fixtures"),
     new Artifact("Executable WAR header", "org.jenkins-ci", "executable-war", null, "https://github.com/jenkinsci/extras-executable-war"),
+    new Artifact("File Leak Detector", "org.kohsuke", "file-leak-detector", null, "https://github.com/jenkinsci/lib-file-leak-detector"),
     new Artifact("GitHub API", "org.kohsuke", "github-api", null, "http://github-api.kohsuke.org/"),
     new Artifact("Jenkins Test Harness", "org.jenkins-ci.main", "jenkins-test-harness", null, "https://github.com/jenkinsci/jenkins-test-harness"),
     new Artifact("Test Annotations", "org.jenkins-ci", "test-annotations", null, "https://github.com/jenkinsci/lib-test-annotations"),
