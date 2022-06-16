@@ -1,3 +1,8 @@
+import java.io.IOException
+import java.io.UncheckedIOException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
 public class JavadocGroupBuilder {
 
     private final String path
@@ -104,6 +109,25 @@ public class JavadocGroupBuilder {
             if (sedReturn != 0) {
                 throw new IllegalStateException('sed failed with ' + sedReturn)
             }
+        }
+
+         * Since Java 9, the javadoc(1) command's package-list file has been superseded by a new
+         * element-list file. However, the Java 8 version of javadoc(1) still consumes the old
+         * package-list file. In order to support both Java 8 and Java 11 builds (including
+         * supporting the ability to link against https://javadoc.jenkins.io), we work around the
+         * problem by ensuring that both package-list and element-list exist. When we no longer need
+         * to support Java 8 builds, this workaround can be deleted.
+         */
+        def packageList = new File(plugin_dir, 'package-list').toPath()
+        def elementList = new File(plugin_dir, 'element-list').toPath()
+        try {
+            if (Files.exists(packageList) && !Files.exists(elementList)) {
+                Files.copy(packageList, elementList, StandardCopyOption.COPY_ATTRIBUTES)
+            } else if (Files.exists(elementList) && !Files.exists(packageList)) {
+                Files.copy(elementList, packageList, StandardCopyOption.COPY_ATTRIBUTES)
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e)
         }
 
         return this;
