@@ -111,6 +111,7 @@ public class JavadocGroupBuilder {
             }
         }
 
+        /*
          * Since Java 9, the javadoc(1) command's package-list file has been superseded by a new
          * element-list file. However, the Java 8 version of javadoc(1) still consumes the old
          * package-list file. In order to support both Java 8 and Java 11 builds (including
