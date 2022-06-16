@@ -98,6 +98,20 @@ public class JavadocGroupBuilder {
         }
 
         /*
+         * Until JDK-8215291 is backported to Java 11, work around the problem by munging the file
+         * ourselves.
+         */
+        def search = new File(plugin_dir, 'search.js')
+        if (search.exists()) {
+            def sedParams = ['/usr/bin/sed', '-i', '-e', 's/if (ui.item.p == item.l)/if (item.m \\&\\& ui.item.p == item.l)/g', search.absolutePath] as String[]
+            def sedProc = Runtime.getRuntime().exec(sedParams)
+            def sedReturn = sedProc.waitFor()
+            if (sedReturn != 0) {
+                throw new IllegalStateException('sed failed with ' + sedReturn)
+            }
+        }
+
+        /*
          * Since Java 9, the javadoc(1) command's package-list file has been superseded by a new
          * element-list file. However, the Java 8 version of javadoc(1) still consumes the old
          * package-list file. In order to support both Java 8 and Java 11 builds (including
