@@ -31,6 +31,21 @@ function generate_javadoc_core() {
         echo ">> failed to generate javadocs for ${release}"
     fi;
 
+    #
+    # Since Java 9, the javadoc(1) command's package-list file has been
+    # superseded by a new element-list file. However, the Java 8 version of
+    # javadoc(1) still consumes the old package-list file. In order to support
+    # both Java 8 and Java 11 builds (including supporting the ability to link
+    # against https://javadoc.jenkins.io), we work around the problem by
+    # ensuring that both package-list and element-list exist. When we no longer
+    # need to support Java 8 builds, this workaround can be deleted.
+    #
+    if [ -e package-list ] && [ ! -e element-list ]; then
+        cp package-list element-list
+    elif [ -e element-list ] && [ ! -e package-list ]; then
+        cp element-list package-list
+    fi
+
     # Move the docs to the archive directory
     cd .. # Leave the current directory
     mv jenkins-core-${release} ${ARCHIVE_DIR}/jenkins-${release}
