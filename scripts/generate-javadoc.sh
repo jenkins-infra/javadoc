@@ -31,6 +31,14 @@ function generate_javadoc_core() {
         echo ">> failed to generate javadocs for ${release}"
     fi;
 
+    #
+    # Until JDK-8215291 is backported to Java 11, work around the problem by
+    # munging the file ourselves.
+    #
+    if [ -f search.js ]; then
+        sed -i -e 's/if (ui.item.p == item.l)/if (item.m \&\& ui.item.p == item.l)/g' search.js
+    fi
+
     # Move the docs to the archive directory
     cd .. # Leave the current directory
     mv jenkins-core-${release} ${ARCHIVE_DIR}/jenkins-${release}

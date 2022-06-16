@@ -92,6 +92,20 @@ public class JavadocGroupBuilder {
             fos.close();
         }
 
+        /*
+         * Until JDK-8215291 is backported to Java 11, work around the problem by munging the file
+         * ourselves.
+         */
+        def search = new File(plugin_dir, 'search.js')
+        if (search.exists()) {
+            def sedParams = ['/usr/bin/sed', '-i', '-e', 's/if (ui.item.p == item.l)/if (item.m \\&\\& ui.item.p == item.l)/g', search.absolutePath] as String[]
+            def sedProc = Runtime.getRuntime().exec(sedParams)
+            def sedReturn = sedProc.waitFor()
+            if (sedReturn != 0) {
+                throw new IllegalStateException('sed failed with ' + sedReturn)
+            }
+        }
+
         return this;
     }
 
