@@ -38,7 +38,10 @@ try {
 
         stage('Archive') {
             sh 'cd build && tar -cjf javadoc-site.tar.bz2 site'
-            archive 'build/*.tar.bz2'
+            archiveArtifacts artifacts: 'build/*.tar.bz2',
+                             allowEmptyArchive: false,
+                             fingerprint: false,
+                             onlyIfSuccessful: true
         }
 
         if (infra.isTrusted()){
