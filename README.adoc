@@ -20,17 +20,17 @@ which can be used for running the build and verifying results.
 Build command:
 
 ```shell
-docker build -t jenkinsinfra/javadoc-dev --build-arg LTS_RELEASES=2.73 --build-arg PLUGINS="credentials git git-client" .
+docker build -t jenkinsinfra/javadoc-dev --build-arg LTS_RELEASES="2.332 2.346" --build-arg PLUGINS="credentials git git-client" .
 ```
 
 Optional arguments:
 
 * `LTS_RELEASES` - list of LTS releases to be published
-** Example: "2.60 2.73"
+** Example: "2.332 2.346"
 ** Default: all LTS lines returned by link:https://repo.jenkins-ci.org[Jenkins Artifactory]
 ** Javadoc for the latest weekly will be published anyway
 * `PLUGINS` - list of plugins to be published
-** Example: "git github git-client"
+** Example: "credentials git git-client"
 ** Default: all plugins by the default Jenkins update site
 
 ### Running image
