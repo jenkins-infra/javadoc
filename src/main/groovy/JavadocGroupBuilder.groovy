@@ -103,7 +103,7 @@ public class JavadocGroupBuilder {
          */
         def search = new File(plugin_dir, 'search.js')
         if (search.exists()) {
-            def sedParams = ['/usr/bin/sed', '-i', '-e', 's/if (ui.item.p == item.l)/if (item.m \\&\\& ui.item.p == item.l)/g', search.absolutePath] as String[]
+            def sedParams = ['sed', '-i', '-e', 's/if (ui.item.p == item.l)/if (item.m \\&\\& ui.item.p == item.l)/g', search.absolutePath] as String[]
             def sedProc = Runtime.getRuntime().exec(sedParams)
             def sedReturn = sedProc.waitFor()
             if (sedReturn != 0) {
