@@ -5,7 +5,6 @@ properties([
     pipelineTriggers([cron('H 5 * * 1')]),
 ])
 
-try {
     node('linux') {
         checkout scm
 
@@ -72,4 +71,3 @@ try {
             }
         }
     }
-}
