@@ -6,9 +6,7 @@ ARG PUBLISH_PATH=/usr/share/nginx/html
 RUN apt-get update
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199, man-db does not help
 RUN mkdir -p /usr/share/man/man1/
-RUN apt-get install -y openjdk-11-jdk wget ant groovy sed
-RUN apt-get install -y curl
-RUN /bin/sed --version || /usr/bin/sed --version
+RUN apt-get install -y openjdk-11-jdk wget ant groovy curl sed
 
 # Just test settings to speedup the startup
 ARG LTS_RELEASES=""
