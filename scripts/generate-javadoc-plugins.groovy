@@ -21,7 +21,7 @@ def indexBuilder = new JavadocGroupBuilder("plugin", "plugin", "Jenkins Plugins 
 
 // For each plugin located in the update center
 
-String location = "http://updates.jenkins.io/current/update-center.actual.json"
+String location = "https://updates.jenkins.io/current/update-center.actual.json"
 def json = new JsonSlurper().parseText(new URL (location).text);
 json.plugins.toSorted(keyComparator).collect { k, v -> v }.eachWithIndex { value, idx ->
     def artifact = Artifact.pluginFromGAV(value.title, value.gav)
