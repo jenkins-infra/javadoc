@@ -20,9 +20,9 @@ try {
         stage('Generate Javadocs') {
             withEnv([
                     "PATH+MVN=${tool 'mvn'}/bin",
-                    "JAVA_HOME=${tool 'jdk8'}",
+                    "JAVA_HOME=${tool 'jdk11'}",
                     "PATH+GROOVY=${tool 'groovy'}/bin",
-                    "PATH+JAVA=${tool 'jdk8'}/bin",
+                    "PATH+JAVA=${tool 'jdk11'}/bin",
                 ]) {
                 sh './scripts/generate-javadoc.sh'
             }
@@ -72,13 +72,4 @@ try {
             }
         }
     }
-}
-catch (exc) {
-    String recipient = 'infra@lists.jenkins-ci.org'
-
-    mail subject: "${env.JOB_NAME} (${env.BUILD_NUMBER}) failed",
-            body: "It appears that ${env.BUILD_URL} is failing, somebody should do something about that",
-              to: recipient,
-         replyTo: recipient,
-            from: 'noreply@ci.jenkins.io'
 }
