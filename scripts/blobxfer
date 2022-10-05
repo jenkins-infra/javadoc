@@ -2,24 +2,22 @@
 #
 # This script is meant to be added to the PATH so the latest blobxfer is
 # always ready to use
+#
 
 set +x
 
 CONTAINER_NAME=alfpark/blobxfer:1.3.1
 
 pull_container() {
-    docker pull ${CONTAINER_NAME}
+	docker pull ${CONTAINER_NAME}
 }
 
 # Pull down the container if we don't already have it
-docker inspect ${CONTAINER_NAME} > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    pull_container
-fi;
+docker inspect "${CONTAINER_NAME}" >/dev/null 2>&1 || pull_container
 
 exec docker run \
-    --rm \
-    -t \
-    -u "$(id -u):$(id -u)" \
-    -v "$(pwd)/build:/data" \
-    "${CONTAINER_NAME}" "${@}"
+	--rm \
+	-t \
+	-u "$(id -u):$(id -u)" \
+	-v "$(pwd)/build:/data" \
+	"${CONTAINER_NAME}" "${@}"
