@@ -26,6 +26,7 @@ components.addAll(Arrays.asList(
     new Artifact("Mock JavaMail", "org.jvnet.mock-javamail", "mock-javamail", null, "https://github.com/jenkinsci/lib-mock-javamail"),
     new Artifact("Support Log Formatter", "io.jenkins.lib", "support-log-formatter", null, "https://github.com/jenkinsci/lib-support-log-formatter"),
     new Artifact("Symbol Annotation", "org.jenkins-ci", "symbol-annotation", null, "https://github.com/jenkinsci/lib-symbol-annotation"),
+    new Artifact("WinP", "org.jvnet.winp", "winp", null, "https://github.com/jenkinsci/winp"),
     new Artifact("Winstone", "org.jenkins-ci", "winstone", null, "https://github.com/jenkinsci/winstone")
 ))
 
