@@ -58,6 +58,15 @@ function generate_javadoc_core() {
     mv jenkins-core-${release} ${ARCHIVE_DIR}/jenkins-${release}
 }
 
+function in_array() {
+    local needle="$1"
+    local element
+    shift
+    for element; do
+        [[ $element == "$needle" ]] && return 0
+    done
+    return 1
+}
 
 wget --no-verbose -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 || { echo "Failed to download jq" >&2 ; exit 1; }
 chmod +x jq || { echo "Failed to make jq executable" >&2 ; exit 1; }
@@ -66,15 +75,25 @@ set -o pipefail
 
 if [ -z "${LTS_RELEASES}" ] ; then
     echo "LTS_RELEASES is not defined. Pulling all releases from Jenkins Artifactory"
-    LTS_RELEASES=$( curl 'https://repo.jenkins-ci.org/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.1' | ./jq --raw-output '.results[].version' | head -n 10 ) || { echo "Failed to retrieve list of releases" >&2 ; exit 1 ; }
+    i=0
+    LTS_LINES=()
+    while read -r version; do
+        [[ $i -ge 10 ]] && break
+        LTS_LINE=${version%.*}
+        in_array "${LTS_LINE}" "${LTS_LINES[@]}" && continue
+        LTS_LINES+=($LTS_LINE)
+        [[ -n $LTS_RELEASES ]] && LTS_RELEASES+=' '
+        LTS_RELEASES+="$version"
+        i=$((i + 1))
+    done < <(curl 'https://repo.jenkins-ci.org/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.*' | ./jq --raw-output '.results[].version' | sort -rV)
 fi
 
 set +o pipefail
 
-for release in $LTS_RELEASES ; do
-    echo ">> Found release ${release/%.1/}"
-    generate_javadoc_core "${release/%.1/}"
-done;
+for release in $LTS_RELEASES; do
+    echo ">> Found release ${release}"
+    generate_javadoc_core "${release}"
+done
 
 LATEST=$(wget -q -O - "https://updates.jenkins.io/current/latestCore.txt")
 
