@@ -93,6 +93,11 @@ public class JavadocGroupBuilder {
             // This will only be encountered if there is no javadocs in our repo. We can safely move on.
             println "No javadoc found for ${artifactType}: ${id}. Tried ${pluginLoc}"
             indexHtml << "<div id='${id}' class='missing'><h2>${name}<span class='version'>${version}</span></h2><p><tt>${id}</tt></p><p>No Javadoc has been published for this ${artifactType}.</p><p>${pageHyperlink(pageURL)}</p></div>"
+        } catch (org.apache.tools.ant.BuildException e) {
+
+            // This has happened when javadocs were corrupt in the repo. We can safely move on.
+            println "Corrupt javadoc found for ${artifactType}: ${id}. Tried ${pluginLoc} got exception ${e}"
+            indexHtml << "<div id='${id}' class='missing'><h2>${name}<span class='version'>${version}</span></h2><p><tt>${id}</tt></p><p>Corrupt Javadoc published for this ${artifactType}.</p><p>${pageHyperlink(pageURL)}</p></div>"
         } finally {
             fos.close();
         }
