@@ -84,12 +84,11 @@ public class JavadocGroupBuilder {
             if (pluginLocation != "https://repo.jenkins-ci.org/releases/") {
                 // If we're querying one of the artifact caching proxies we need to add authentication
                 try {
-                    auth = Base64.getEncoder().encode((System.getenv("ARTIFACT_CACHING_PROXY_USERNAME") + ':' + System.getenv("ARTIFACT_CACHING_PROXY_PASSWORD")).getBytes("UTF-8"));
                     URLConnection conn = new URL(pluginLoc).openConnection();
                     conn.setRequestProperty("Accept-Charset", "UTF-8");
                     conn.setRequestProperty("Accept-Encoding", "identity");
                     conn.setRequestProperty("User-Agent", "backend-extension-indexer/0.1");
-                    conn.setRequestProperty("Authorization", "Basic " + new String(auth, "UTF-8"));
+                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((System.getenv("ARTIFACT_CACHING_PROXY_USERNAME") + ':' + System.getenv("ARTIFACT_CACHING_PROXY_PASSWORD")).getBytes("UTF-8")), "UTF-8"));
                     file << conn.getInputStream()
                 } catch(UnsupportedEncodingException uee) {
                     uee.printStackTrace();
