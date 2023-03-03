@@ -16,8 +16,6 @@ mkdir_p "$ARCHIVE_DIR"
 # Retrieve the artifact caching proxy provider defined on the agent running the script
 # or using the Azure one as default if none is defined
 CURRENT_ACP_PROVIDER="${ARTIFACT_CACHING_PROXY_PROVIDER:-azure}"
-echo "ARTIFACT_CACHING_PROXY_PROVIDER: $ARTIFACT_CACHING_PROXY_PROVIDER"
-echo "CURRENT_ACP_PROVIDER: $CURRENT_ACP_PROVIDER"
 
 function generate_javadoc_core() {
 	declare release=$1
@@ -86,7 +84,7 @@ if [[ -z ${LTS_RELEASES} ]]; then
 		[[ -n $LTS_RELEASES ]] && LTS_RELEASES+=' '
 		LTS_RELEASES+="$version"
 		i=$((i + 1))
-	done < <(curl 'https://repo.${CURRENT_ACP_PROVIDER}.jenkins.io/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.*' | ./jq --raw-output '.results[].version' | sort -rV)
+	done < <(curl "https://repo.${CURRENT_ACP_PROVIDER}.jenkins.io/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.*" | ./jq --raw-output '.results[].version' | sort -rV)
 fi
 
 set +o pipefail
