@@ -52,7 +52,7 @@ public class JavadocGroupBuilder {
 
         def repoUrl = pluginLocation + gid + "/" + id + "/"
         if (version == null) {
-            def metadataURL = repoUrl + "maven-metadata.xml"
+            def metadataURL = "https://repo.jenkins-ci.org/releases/" + gid + "/" + id + "/maven-metadata.xml"
             println "Version is not defined, reading latest from ${metadataURL}"
             def metadata = new XmlSlurper().parseText(new URL (metadataURL).text)
             version = metadata.versioning.latest
@@ -80,8 +80,6 @@ public class JavadocGroupBuilder {
         def fos = file.newOutputStream()
 
         try {
-            System.out.println("--> this.pluginLocation: " + this.pluginLocation)
-            System.out.println("--> pluginLocation: " + pluginLocation)
             // Write the contents of the *-javadoc.jar to the file
             if (this.pluginLocation != "https://repo.jenkins-ci.org/releases/") {
                 // If we're querying one of the artifact caching proxies we need to add authentication

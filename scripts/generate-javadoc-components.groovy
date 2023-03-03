@@ -33,7 +33,6 @@ components.addAll(Arrays.asList(
 
 // Use the artifact caching proxy if defined
 String pluginLocation = (System.getenv("ARTIFACT_CACHING_PROXY_ORIGIN") != null) ? System.getenv("ARTIFACT_CACHING_PROXY_ORIGIN") + "/releases/" : "https://repo.jenkins-ci.org/releases/";
-System.out.println("pluginLocation: " + pluginLocation)
 
 // For each plugin located in the update center
 def indexBuilder = new JavadocGroupBuilder("component", "component", "Jenkins Components Javadoc", null, pluginLocation);
