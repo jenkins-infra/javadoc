@@ -31,9 +31,11 @@ components.addAll(Arrays.asList(
     new Artifact("Winstone", "org.jenkins-ci", "winstone", null, "https://github.com/jenkinsci/winstone")
 ))
 
+// Use the artifact caching proxy if defined
+String pluginLocation = (System.getenv("ARTIFACT_CACHING_PROXY_ORIGIN") != null) ? System.getenv("ARTIFACT_CACHING_PROXY_ORIGIN") + "/releases/" : "https://repo.jenkins-ci.org/releases/";
 
 // For each plugin located in the update center
-def indexBuilder = new JavadocGroupBuilder("component", "component", "Jenkins Components Javadoc");
+def indexBuilder = new JavadocGroupBuilder("component", "component", "Jenkins Components Javadoc", null, pluginLocation);
 components.toSorted(keyComparator).eachWithIndex { value, idx ->
     indexBuilder.withArtifact(value)
 }

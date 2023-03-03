@@ -13,14 +13,15 @@ mkdir_p "$OUTPUT_DIR"
 mkdir_p "$SITE_DIR"
 mkdir_p "$ARCHIVE_DIR"
 
-# Retrieve the artifact caching proxy provider defined on the agent running the script
-# or using the Azure one as default if none is defined
-CURRENT_ACP_PROVIDER="${ARTIFACT_CACHING_PROXY_PROVIDER:-azure}"
-
 function generate_javadoc_core() {
 	declare release=$1
 	# First we need to get the built javadocs.
-	wget --no-verbose "https://repo.$CURRENT_ACP_PROVIDER.jenkins.io/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar"
+	if [ -n ${ARTIFACT_CACHING_PROXY_ORIGIN-} ]
+	then
+		wget --no-verbose --http-user=${ARTIFACT_CACHING_PROXY_USERNAME} --http-password=${ARTIFACT_CACHING_PROXY_PASSWORD} "${ARTIFACT_CACHING_PROXY_ORIGIN}/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar"
+	else
+		wget --no-verbose "https://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar"
+	fi
 
 	# We need to move the contents to a new directory to then extract the content.
 	mkdir "jenkins-core-${release}"
@@ -84,7 +85,7 @@ if [[ -z ${LTS_RELEASES} ]]; then
 		[[ -n $LTS_RELEASES ]] && LTS_RELEASES+=' '
 		LTS_RELEASES+="$version"
 		i=$((i + 1))
-	done < <(curl "https://repo.${CURRENT_ACP_PROVIDER}.jenkins.io/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.*" | ./jq --raw-output '.results[].version' | sort -rV)
+	done < <(curl 'https://repo.jenkins-ci.org/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.*' | ./jq --raw-output '.results[].version' | sort -rV)
 fi
 
 set +o pipefail
