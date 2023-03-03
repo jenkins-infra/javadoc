@@ -16,11 +16,13 @@ mkdir_p "$ARCHIVE_DIR"
 # Retrieve the artifact caching proxy provider defined on the agent running the script
 # or using the Azure one as default if none is defined
 CURRENT_ACP_PROVIDER="${ARTIFACT_CACHING_PROXY_PROVIDER:-azure}"
+echo "ARTIFACT_CACHING_PROXY_PROVIDER: $ARTIFACT_CACHING_PROXY_PROVIDER"
+echo "CURRENT_ACP_PROVIDER: $CURRENT_ACP_PROVIDER"
 
 function generate_javadoc_core() {
 	declare release=$1
 	# First we need to get the built javadocs.
-	wget --no-verbose "https://repo.${CURRENT_ACP_PROVIDER}.jenkins.io/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar"
+	wget --no-verbose "https://repo.$CURRENT_ACP_PROVIDER.jenkins.io/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar"
 
 	# We need to move the contents to a new directory to then extract the content.
 	mkdir "jenkins-core-${release}"
