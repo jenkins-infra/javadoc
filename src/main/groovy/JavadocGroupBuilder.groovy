@@ -52,9 +52,31 @@ public class JavadocGroupBuilder {
 
         def repoUrl = pluginLocation + gid + "/" + id + "/"
         if (version == null) {
-            def metadataURL = "https://repo.jenkins-ci.org/releases/" + gid + "/" + id + "/maven-metadata.xml"
+            def metadataURL = repoUrl + "/maven-metadata.xml"
             println "Version is not defined, reading latest from ${metadataURL}"
-            def metadata = new XmlSlurper().parseText(new URL (metadataURL).text)
+            if (this.pluginLocation != "https://repo.jenkins-ci.org/releases/") {
+                // If we're querying one of the artifact caching proxies we need to add authentication
+                try {
+                    URLConnection conn = new URL(metadataURL).openConnection()
+                    conn.setRequestProperty("Accept-Charset", "UTF-8")
+                    conn.setRequestProperty("Accept-Encoding", "identity")
+                    conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
+                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((System.getenv("ARTIFACT_CACHING_PROXY_USERNAME") + ':' + System.getenv("ARTIFACT_CACHING_PROXY_PASSWORD")).getBytes("UTF-8")), "UTF-8"))
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))
+                    StringBuilder urlContent = new StringBuilder()
+                    String inputLine
+                    while ((inputLine = in.readLine()) != null) {
+                        urlContent.append(inputLine)
+                    }
+                    in.close()
+                    return response.toString()
+                    def metadata = new XmlSlurper().parseText(response.toString())
+                } catch(UnsupportedEncodingException uee) {
+                    uee.printStackTrace();
+                }
+            } else {
+                def metadata = new XmlSlurper().parseText(urlContent.toString())
+            }
             version = metadata.versioning.latest
             if (version != null && !version.trim().empty) {
                 println "Located version: ${version}"
@@ -84,11 +106,11 @@ public class JavadocGroupBuilder {
             if (this.pluginLocation != "https://repo.jenkins-ci.org/releases/") {
                 // If we're querying one of the artifact caching proxies we need to add authentication
                 try {
-                    URLConnection conn = new URL(pluginLoc).openConnection();
-                    conn.setRequestProperty("Accept-Charset", "UTF-8");
-                    conn.setRequestProperty("Accept-Encoding", "identity");
-                    conn.setRequestProperty("User-Agent", "backend-extension-indexer/0.1");
-                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((System.getenv("ARTIFACT_CACHING_PROXY_USERNAME") + ':' + System.getenv("ARTIFACT_CACHING_PROXY_PASSWORD")).getBytes("UTF-8")), "UTF-8"));
+                    URLConnection conn = new URL(pluginLoc).openConnection()
+                    conn.setRequestProperty("Accept-Charset", "UTF-8")
+                    conn.setRequestProperty("Accept-Encoding", "identity")
+                    conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
+                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((System.getenv("ARTIFACT_CACHING_PROXY_USERNAME") + ':' + System.getenv("ARTIFACT_CACHING_PROXY_PASSWORD")).getBytes("UTF-8")), "UTF-8"))
                     file << conn.getInputStream()
                 } catch(UnsupportedEncodingException uee) {
                     uee.printStackTrace();
