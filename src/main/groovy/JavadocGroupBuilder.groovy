@@ -54,7 +54,7 @@ public class JavadocGroupBuilder {
 
         def repoUrl = pluginLocation + gid + "/" + id + "/"
         if (version == null) {
-            def metadataURL = repoUrl + "/maven-metadata.xml"
+            def metadataURL = repoUrl + "maven-metadata.xml"
             def metadata
             println "Version is not defined, reading latest from ${metadataURL}"
             if (this.pluginLocation != "https://repo.jenkins-ci.org/releases/") {
