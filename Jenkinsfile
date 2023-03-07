@@ -19,21 +19,19 @@ node('linux') {
     def repositoryOrigin = "https://repo." + (env.ARTIFACT_CACHING_PROXY_PROVIDER ?: 'azure') + ".jenkins.io"
 
     stage('Generate Javadocs') {
-        retry(3) {
-            withEnv([
-                    "PATH+MVN=${tool 'mvn'}/bin",
-                    "JAVA_HOME=${tool 'jdk11'}",
-                    "PATH+GROOVY=${tool 'groovy'}/bin",
-                    "PATH+JAVA=${tool 'jdk11'}/bin",
-                    "ARTIFACT_CACHING_PROXY_ORIGIN=${repositoryOrigin}"
-            ]) {
-                withCredentials([usernamePassword(
-                    credentialsId: 'artifact-caching-proxy-credentials',
-                    usernameVariable: 'ARTIFACT_CACHING_PROXY_USERNAME',
-                    passwordVariable: 'ARTIFACT_CACHING_PROXY_PASSWORD'
-                )]) {
-                    sh './scripts/generate-javadoc.sh'
-                }
+        withEnv([
+                "PATH+MVN=${tool 'mvn'}/bin",
+                "JAVA_HOME=${tool 'jdk11'}",
+                "PATH+GROOVY=${tool 'groovy'}/bin",
+                "PATH+JAVA=${tool 'jdk11'}/bin",
+                "ARTIFACT_CACHING_PROXY_ORIGIN=${repositoryOrigin}"
+        ]) {
+            withCredentials([usernamePassword(
+                credentialsId: 'artifact-caching-proxy-credentials',
+                usernameVariable: 'ARTIFACT_CACHING_PROXY_USERNAME',
+                passwordVariable: 'ARTIFACT_CACHING_PROXY_PASSWORD'
+            )]) {
+                sh './scripts/generate-javadoc.sh'
             }
         }
     }
