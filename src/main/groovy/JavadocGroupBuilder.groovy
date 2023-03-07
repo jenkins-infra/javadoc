@@ -55,6 +55,7 @@ public class JavadocGroupBuilder {
         def repoUrl = pluginLocation + gid + "/" + id + "/"
         if (version == null) {
             def metadataURL = repoUrl + "/maven-metadata.xml"
+            def metadata
             println "Version is not defined, reading latest from ${metadataURL}"
             if (this.pluginLocation != "https://repo.jenkins-ci.org/releases/") {
                 // If we're querying one of the artifact caching proxies we need to add authentication
@@ -71,12 +72,12 @@ public class JavadocGroupBuilder {
                         urlContent.append(inputLine)
                     }
                     inBR.close()
-                    def metadata = new XmlSlurper().parseText(urlContent.toString())
+                    metadata = new XmlSlurper().parseText(urlContent.toString())
                 } catch(UnsupportedEncodingException uee) {
                     uee.printStackTrace();
                 }
             } else {
-                def metadata = new XmlSlurper().parseText(new URL (metadataURL).text)
+                metadata = new XmlSlurper().parseText(new URL (metadataURL).text)
             }
             version = metadata.versioning.latest
             if (version != null && !version.trim().empty) {
