@@ -2,7 +2,7 @@
 
 properties([
     buildDiscarder(logRotator(numToKeepStr: '2')),
-    pipelineTriggers([cron('H 5 * * 1')]), 
+    pipelineTriggers([cron('H 5 * * 1')]),
 ])
 
 node('linux') {
