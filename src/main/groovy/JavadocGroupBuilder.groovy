@@ -70,7 +70,7 @@ public class JavadocGroupBuilder {
                     while ((inputLine = inBR.readLine()) != null) {
                         urlContent.append(inputLine)
                     }
-                    in.close()
+                    inBR.close()
                     def metadata = new XmlSlurper().parseText(urlContent.toString())
                 } catch(UnsupportedEncodingException uee) {
                     uee.printStackTrace();
