@@ -64,10 +64,10 @@ public class JavadocGroupBuilder {
                     conn.setRequestProperty("Accept-Encoding", "identity")
                     conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
                     conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((System.getenv("ARTIFACT_CACHING_PROXY_USERNAME") + ':' + System.getenv("ARTIFACT_CACHING_PROXY_PASSWORD")).getBytes("UTF-8")), "UTF-8"))
-                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))
+                    BufferedReader inBR = new BufferedReader(new InputStreamReader(conn.getInputStream()))
                     StringBuilder urlContent = new StringBuilder()
                     String inputLine
-                    while ((inputLine = in.readLine()) != null) {
+                    while ((inputLine = inBR.readLine()) != null) {
                         urlContent.append(inputLine)
                     }
                     in.close()
