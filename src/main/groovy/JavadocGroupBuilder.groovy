@@ -69,13 +69,12 @@ public class JavadocGroupBuilder {
                         urlContent.append(inputLine)
                     }
                     in.close()
-                    return response.toString()
-                    def metadata = new XmlSlurper().parseText(response.toString())
+                    def metadata = new XmlSlurper().parseText(urlContent.toString())
                 } catch(UnsupportedEncodingException uee) {
                     uee.printStackTrace();
                 }
             } else {
-                def metadata = new XmlSlurper().parseText(urlContent.toString())
+                def metadata = new XmlSlurper().parseText(new URL (metadataURL).text)
             }
             version = metadata.versioning.latest
             if (version != null && !version.trim().empty) {
