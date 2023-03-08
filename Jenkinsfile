@@ -16,22 +16,26 @@ node('linux') {
         deleteDir()
     }
 
-    def repositoryOrigin = "https://repo." + (env.ARTIFACT_CACHING_PROXY_PROVIDER ?: 'azure') + ".jenkins.io"
-
     stage('Generate Javadocs') {
         withEnv([
                 "PATH+MVN=${tool 'mvn'}/bin",
                 "JAVA_HOME=${tool 'jdk11'}",
                 "PATH+GROOVY=${tool 'groovy'}/bin",
                 "PATH+JAVA=${tool 'jdk11'}/bin",
-                "ARTIFACT_CACHING_PROXY_ORIGIN=${repositoryOrigin}"
         ]) {
-            withCredentials([usernamePassword(
-                credentialsId: 'artifact-caching-proxy-credentials',
-                usernameVariable: 'ARTIFACT_CACHING_PROXY_USERNAME',
-                passwordVariable: 'ARTIFACT_CACHING_PROXY_PASSWORD'
-            )]) {
+            if (infra.isTrusted()) {
                 sh './scripts/generate-javadoc.sh'
+            } else {
+                withCredentials([usernamePassword(
+                    credentialsId: 'artifact-caching-proxy-credentials',
+                    usernameVariable: 'ARTIFACT_CACHING_PROXY_USERNAME',
+                    passwordVariable: 'ARTIFACT_CACHING_PROXY_PASSWORD'
+                )]) {
+                    def repositoryOrigin = "https://repo." + (env.ARTIFACT_CACHING_PROXY_PROVIDER ?: 'azure') + ".jenkins.io"
+                    withEnv(["ARTIFACT_CACHING_PROXY_ORIGIN=${repositoryOrigin}"]) {
+                        sh './scripts/generate-javadoc.sh'
+                    }
+                }
             }
         }
     }
@@ -71,7 +75,6 @@ node('linux') {
             }
         }
     }
-
 
     stage('Clean up') {
         echo 'We want to generate fresh javadocs on each run'
