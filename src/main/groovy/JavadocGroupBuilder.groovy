@@ -14,6 +14,8 @@ public class JavadocGroupBuilder {
     private final String artifactType
     private final Set<String> artifactIDs
     private final String pluginLocation
+    private final String username
+    private final String password
 
     // AntBuilder used for unzipping content
     private def indexHtml = new StringBuilder()
@@ -24,12 +26,16 @@ public class JavadocGroupBuilder {
 
     public JavadocGroupBuilder(String path, String artifactType, String title,
                                Set<String> artifactIDs = null,
-                               String pluginLocation = "https://repo.jenkins-ci.org/releases/"
+                               String pluginLocation = "https://repo.jenkins-ci.org/releases/",
+                               String username = null,
+                               String password = null,
                                ) {
         this.path = path
         this.artifactType = artifactType
         this.artifactIDs = artifactIDs
         this.pluginLocation = pluginLocation
+        this.username = username
+        this.password = password
 
 
         // Header
@@ -57,14 +63,14 @@ public class JavadocGroupBuilder {
             def metadataURL = repoUrl + "maven-metadata.xml"
             def metadata
             println "Version is not defined, reading latest from ${metadataURL}"
-            if (this.pluginLocation != "https://repo.jenkins-ci.org/releases/") {
-                // If we're querying one of the artifact caching proxies we need to add authentication
+            // If username & password are defined, it means we need to add a basic auth to the request
+            if (this.username && this.password) {
                 try {
                     URLConnection conn = new URL(metadataURL).openConnection()
                     conn.setRequestProperty("Accept-Charset", "UTF-8")
                     conn.setRequestProperty("Accept-Encoding", "identity")
                     conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
-                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((System.getenv("ARTIFACT_CACHING_PROXY_USERNAME") + ':' + System.getenv("ARTIFACT_CACHING_PROXY_PASSWORD")).getBytes("UTF-8")), "UTF-8"))
+                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((this.username + ':' + this.password)).getBytes("UTF-8")), "UTF-8"))
                     BufferedReader inBR = new BufferedReader(new InputStreamReader(conn.getInputStream()))
                     StringBuilder urlContent = new StringBuilder()
                     String inputLine
@@ -105,14 +111,14 @@ public class JavadocGroupBuilder {
 
         try {
             // Write the contents of the *-javadoc.jar to the file
-            if (this.pluginLocation != "https://repo.jenkins-ci.org/releases/") {
-                // If we're querying one of the artifact caching proxies we need to add authentication
+            // If username & password are defined, it means we need to add a basic auth to the request
+            if (this.username && this.password) {
                 try {
                     URLConnection conn = new URL(pluginLoc).openConnection()
                     conn.setRequestProperty("Accept-Charset", "UTF-8")
                     conn.setRequestProperty("Accept-Encoding", "identity")
                     conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
-                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((System.getenv("ARTIFACT_CACHING_PROXY_USERNAME") + ':' + System.getenv("ARTIFACT_CACHING_PROXY_PASSWORD")).getBytes("UTF-8")), "UTF-8"))
+                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((this.username + ':' + this.password)).getBytes("UTF-8")), "UTF-8"))
                     file << conn.getInputStream()
                 } catch(UnsupportedEncodingException uee) {
                     uee.printStackTrace();
