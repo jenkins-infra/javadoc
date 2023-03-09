@@ -6,7 +6,7 @@
 
 set +x
 
-CONTAINER_NAME=alfpark/blobxfer:1.3.1
+CONTAINER_NAME=mcr.microsoft.com/blobxfer:1.11.0
 
 pull_container() {
 	docker pull ${CONTAINER_NAME}
