@@ -70,7 +70,7 @@ public class JavadocGroupBuilder {
                     conn.setRequestProperty("Accept-Charset", "UTF-8")
                     conn.setRequestProperty("Accept-Encoding", "identity")
                     conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
-                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode(this.username + ':' + this.password).getBytes("UTF-8"), "UTF-8"))
+                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((this.username + ':' + this.password).getBytes("UTF-8")), "UTF-8"))
                     BufferedReader inBR = new BufferedReader(new InputStreamReader(conn.getInputStream()))
                     StringBuilder urlContent = new StringBuilder()
                     String inputLine
@@ -118,7 +118,7 @@ public class JavadocGroupBuilder {
                     conn.setRequestProperty("Accept-Charset", "UTF-8")
                     conn.setRequestProperty("Accept-Encoding", "identity")
                     conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
-                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode(this.username + ':' + this.password).getBytes("UTF-8"), "UTF-8"))
+                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((this.username + ':' + this.password).getBytes("UTF-8")), "UTF-8"))
                     file << conn.getInputStream()
                 } catch(UnsupportedEncodingException uee) {
                     uee.printStackTrace();
