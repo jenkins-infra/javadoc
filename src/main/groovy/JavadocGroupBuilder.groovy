@@ -28,7 +28,7 @@ public class JavadocGroupBuilder {
                                Set<String> artifactIDs = null,
                                String pluginLocation = "https://repo.jenkins-ci.org/releases/",
                                String username = null,
-                               String password = null,
+                               String password = null
                                ) {
         this.path = path
         this.artifactType = artifactType
