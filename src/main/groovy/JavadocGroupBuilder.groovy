@@ -63,28 +63,15 @@ public class JavadocGroupBuilder {
             def metadataURL = repoUrl + "maven-metadata.xml"
             def metadata
             println "Version is not defined, reading latest from ${metadataURL}"
-            // If username & password are defined, it means we need to add a basic auth to the request
-            if (this.username && this.password) {
-                try {
-                    URLConnection conn = new URL(metadataURL).openConnection()
-                    conn.setRequestProperty("Accept-Charset", "UTF-8")
-                    conn.setRequestProperty("Accept-Encoding", "identity")
-                    conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
-                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((this.username + ':' + this.password).getBytes("UTF-8")), "UTF-8"))
-                    BufferedReader inBR = new BufferedReader(new InputStreamReader(conn.getInputStream()))
-                    StringBuilder urlContent = new StringBuilder()
-                    String inputLine
-                    while ((inputLine = inBR.readLine()) != null) {
-                        urlContent.append(inputLine)
-                    }
-                    inBR.close()
-                    metadata = new XmlSlurper().parseText(urlContent.toString())
-                } catch(UnsupportedEncodingException uee) {
-                    uee.printStackTrace();
-                }
-            } else {
-                metadata = new XmlSlurper().parseText(new URL (metadataURL).text)
+            URLConnection metadataConn = getConnectionWithBasicAuthIfNeeded(metadataURL)
+            BufferedReader inBR = new BufferedReader(new InputStreamReader(metadataConn.getInputStream()))
+            StringBuilder urlContent = new StringBuilder()
+            String inputLine
+            while ((inputLine = inBR.readLine()) != null) {
+                urlContent.append(inputLine)
             }
+            inBR.close()
+            metadata = new XmlSlurper().parseText(urlContent.toString())
             version = metadata.versioning.latest
             if (version != null && !version.trim().empty) {
                 println "Located version: ${version}"
@@ -111,21 +98,8 @@ public class JavadocGroupBuilder {
 
         try {
             // Write the contents of the *-javadoc.jar to the file
-            // If username & password are defined, it means we need to add a basic auth to the request
-            if (this.username && this.password) {
-                try {
-                    URLConnection conn = new URL(pluginLoc).openConnection()
-                    conn.setRequestProperty("Accept-Charset", "UTF-8")
-                    conn.setRequestProperty("Accept-Encoding", "identity")
-                    conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
-                    conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((this.username + ':' + this.password).getBytes("UTF-8")), "UTF-8"))
-                    file << conn.getInputStream()
-                } catch(UnsupportedEncodingException uee) {
-                    uee.printStackTrace();
-                }
-            } else {
-                file << new URL(pluginLoc).openStream()
-            }
+            URLConnection pluginConn = getConnectionWithBasicAuthIfNeeded(pluginLoc)
+            file << pluginConn.getInputStream()
 
             // Unzip the contents to the plugin directory
             ant.unzip(
@@ -184,6 +158,23 @@ public class JavadocGroupBuilder {
         }
 
         return this;
+    }
+
+    private URLConnection getConnectionWithBasicAuthIfNeeded(String url) {
+        URLConnection conn = null
+        try {
+            conn = new URL(url).openConnection()
+            // If username & password are defined, it means we need to add a basic auth to the request
+            if (this.username && this.password) {
+                conn.setRequestProperty("Accept-Charset", "UTF-8")
+                conn.setRequestProperty("Accept-Encoding", "identity")
+                conn.setRequestProperty("User-Agent", "javadoc-generator/0.1")
+                conn.setRequestProperty("Authorization", "Basic " + new String(Base64.getEncoder().encode((this.username + ':' + this.password).getBytes("UTF-8")), "UTF-8"))
+            }
+        } catch(UnsupportedEncodingException uee) {
+            uee.printStackTrace()
+        }
+        return conn
     }
 
     public void build() {
