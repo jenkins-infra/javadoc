@@ -61,7 +61,6 @@ public class JavadocGroupBuilder {
         def repoUrl = pluginLocation + gid + "/" + id + "/"
         if (version == null) {
             def metadataURL = repoUrl + "maven-metadata.xml"
-            def metadata
             println "Version is not defined, reading latest from ${metadataURL}"
             URLConnection metadataConn = getConnectionWithBasicAuthIfNeeded(metadataURL)
             BufferedReader inBR = new BufferedReader(new InputStreamReader(metadataConn.getInputStream()))
@@ -71,7 +70,7 @@ public class JavadocGroupBuilder {
                 urlContent.append(inputLine)
             }
             inBR.close()
-            metadata = new XmlSlurper().parseText(urlContent.toString())
+            def metadata = new XmlSlurper().parseText(urlContent.toString())
             version = metadata.versioning.latest
             if (version != null && !version.trim().empty) {
                 println "Located version: ${version}"
