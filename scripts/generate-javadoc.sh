@@ -16,7 +16,12 @@ mkdir_p "$ARCHIVE_DIR"
 function generate_javadoc_core() {
 	declare release=$1
 	# First we need to get the built javadocs.
-	wget --no-verbose "https://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar"
+	if [[ -n "${ARTIFACT_CACHING_PROXY_ORIGIN-}" ]]
+	then
+		wget --no-verbose --http-user=${ARTIFACT_CACHING_PROXY_USERNAME} --http-password=${ARTIFACT_CACHING_PROXY_PASSWORD} "${ARTIFACT_CACHING_PROXY_ORIGIN}/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar"
+	else
+		wget --no-verbose "https://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-core/${release}/jenkins-core-${release}-javadoc.jar"
+	fi
 
 	# We need to move the contents to a new directory to then extract the content.
 	mkdir "jenkins-core-${release}"

@@ -16,8 +16,13 @@ if (args.length > 0 && !args[0].trim().empty) {
     println "Plugins to be published: ${argPluginIDs.join(",")}"
 }
 
+// Use the artifact caching proxy if defined
+String pluginLocation = (System.getenv("ARTIFACT_CACHING_PROXY_ORIGIN") != null) ? System.getenv("ARTIFACT_CACHING_PROXY_ORIGIN") + "/releases/" : "https://repo.jenkins-ci.org/releases/"
+String username = System.getenv("ARTIFACT_CACHING_PROXY_USERNAME") ?: null
+String password = System.getenv("ARTIFACT_CACHING_PROXY_PASSWORD") ?: null
+
 // Start building the plugin group
-def indexBuilder = new JavadocGroupBuilder("plugin", "plugin", "Jenkins Plugins Javadoc", pluginsAIDs);
+def indexBuilder = new JavadocGroupBuilder("plugin", "plugin", "Jenkins Plugins Javadoc", pluginsAIDs, pluginLocation, username, password)
 
 // For each plugin located in the update center
 
