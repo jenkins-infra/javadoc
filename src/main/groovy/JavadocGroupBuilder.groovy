@@ -42,7 +42,6 @@ public class JavadocGroupBuilder {
         indexHtml << "<html><head><title>${title}</title>"
         indexHtml << '<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>'
         indexHtml << '<link rel="stylesheet" type="text/css" href="style.css"/>'
-        indexHtml << '<script src="script.js"></script>'
         indexHtml << '</head><body>'
     }
 
