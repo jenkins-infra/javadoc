@@ -1,5 +1,5 @@
-# Use nginx stable
-FROM nginx:1.23.4
+# Use nginx stable (even minor version)
+FROM nginx:1.24.0
 
 ARG PUBLISH_PATH=/usr/share/nginx/html
 
