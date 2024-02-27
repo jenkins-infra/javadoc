@@ -58,21 +58,53 @@ node('linux') {
 
     if (infra.isTrusted()){
         stage('Publish on Azure') {
-            /* -> https://github.com/Azure/blobxfer
-            Require credential 'JAVADOC_STORAGEACCOUNTKEY' set to the storage account key */
-            withCredentials([string(credentialsId: 'JAVADOC_STORAGEACCOUNTKEY', variable: 'JAVADOC_STORAGEACCOUNTKEY')]) {
-                sh './scripts/blobxfer upload \
-                --local-path /data/site \
-                --storage-account-key $JAVADOC_STORAGEACCOUNTKEY \
-                --storage-account prodjavadoc \
-                --remote-path javadoc \
-                --recursive \
-                --mode file \
-                --skip-on-md5-match \
-                --file-md5 \
-                --connect-timeout 30 \
-                --delete'
-            }
+            parallel(
+                failFast: false,
+                'With blobxfer on prodjavadoc': {
+                    /* -> https://github.com/Azure/blobxfer
+                    Require credential 'JAVADOC_STORAGEACCOUNTKEY' set to the storage account key */
+                    withCredentials([string(credentialsId: 'JAVADOC_STORAGEACCOUNTKEY', variable: 'JAVADOC_STORAGEACCOUNTKEY')]) {
+                        sh './scripts/blobxfer upload \
+                        --local-path /data/site \
+                        --storage-account-key $JAVADOC_STORAGEACCOUNTKEY \
+                        --storage-account prodjavadoc \
+                        --remote-path javadoc \
+                        --recursive \
+                        --mode file \
+                        --skip-on-md5-match \
+                        --file-md5 \
+                        --connect-timeout 30 \
+                        --delete'
+                    }
+                },
+                'With azcopy on javadocjenkinsio': {
+                    infra.withFileShareServicePrincipal([
+                        servicePrincipalCredentialsId: 'trustedci_javadocjenkinsio_fileshare_serviceprincipal_writer',
+                        fileShare: 'javadoc-jenkins-io',
+                        fileShareStorageAccount: 'javadocjenkinsio',
+                        durationInMinute: 45
+                    ]) {
+                        sh '''
+                        # Don't output sensitive information
+                        set +x
+
+                        # Synchronize the File Share content
+                        azcopy sync \
+                            --skip-version-check \
+                            --recursive=true\
+                            --delete-destination=true \
+                            --compare-hash=MD5 \
+                            --put-md5 \
+                            --local-hash-storage-mode=HiddenFiles \
+                            ./build/site/ "${FILESHARE_SIGNED_URL}"
+
+                        # Retrieve azcopy logs to archive them
+                        cat /home/jenkins/.azcopy/*.log > azcopy.log
+                        '''
+                        archiveArtifacts 'azcopy.log'
+                    }
+                }
+            )
         }
     }
 
