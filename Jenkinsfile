@@ -82,7 +82,7 @@ node('linux') {
                         servicePrincipalCredentialsId: 'trustedci_javadocjenkinsio_fileshare_serviceprincipal_writer',
                         fileShare: 'javadoc-jenkins-io',
                         fileShareStorageAccount: 'javadocjenkinsio',
-                        durationInMinute: 45
+                        durationInMinute: 20
                     ]) {
                         sh '''
                         # Don't output sensitive information
