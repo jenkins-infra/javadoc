@@ -5,7 +5,7 @@ properties([
     pipelineTriggers([cron('H 5 * * 3')]),
 ])
 
-node('linux') {
+node('linux-arm64') {
     checkout scm
 
     dir("scripts/build") {
