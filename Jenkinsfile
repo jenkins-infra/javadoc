@@ -5,7 +5,7 @@ properties([
     pipelineTriggers([cron('H 5 * * 3')]),
 ])
 
-// 'linux-arm64' is now common between ci.jenkins.io and infra.ci.jenkins.io for VM "Docker Linux ARM64"
+// 'linux-arm64' is a common label between ci.jenkins.io and infra.ci.jenkins.io for obtaining ARM64 Linux VM with Docker
 node('linux-arm64') {
     checkout scm
 
