@@ -5,7 +5,8 @@ properties([
     pipelineTriggers([cron('H 5 * * 3')]),
 ])
 
-node('linux-arm64') {
+// 'arm64linux' is the (legacy) label used on ci.jenkins.io for VM "Docker Linux ARM64" while 'linux-arm64' is the label used on infra.ci.jenkins.io
+node('linux-arm64 || arm64linux') {
     checkout scm
 
     dir("scripts/build") {
