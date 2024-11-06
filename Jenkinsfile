@@ -26,7 +26,7 @@ node('linux') {
             if (infra.isTrusted()) {
                 sh './scripts/generate-javadoc.sh'
             } else {
-                withArtifactCachingProxy(true) {
+                infra.withArtifactCachingProxy(true) {
                     sh './scripts/generate-javadoc.sh'
                 }
             }
