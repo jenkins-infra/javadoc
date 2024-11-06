@@ -74,12 +74,14 @@ node('linux') {
                     '''
                 }
             } catch (err) {
+                currentBuild.result = 'FAILURE'
                 // Only collect azcopy log when the deployment fails, because it is an heavy one
                 sh '''
                 # Retrieve azcopy logs to archive them
                 cat /home/jenkins/.azcopy/*.log > azcopy.log
                 '''
                 archiveArtifacts 'azcopy.log'
+                
             }
         }
     }
