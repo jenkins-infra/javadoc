@@ -58,26 +58,31 @@ node('linux') {
 
     if (infra.isTrusted()){
         stage('Publish on Azure') {
-            infra.withFileShareServicePrincipal([
-                servicePrincipalCredentialsId: 'trustedci_javadocjenkinsio_fileshare_serviceprincipal_writer',
-                fileShare: 'javadoc-jenkins-io',
-                fileShareStorageAccount: 'javadocjenkinsio',
-                durationInMinute: 20
-            ]) {
+            try {
+                infra.withFileShareServicePrincipal([
+                    servicePrincipalCredentialsId: 'trustedci_javadocjenkinsio_fileshare_serviceprincipal_writer',
+                    fileShare: 'javadoc-jenkins-io',
+                    fileShareStorageAccount: 'javadocjenkinsio',
+                    durationInMinute: 20
+                ]) {
+                    sh '''
+                    # Don't output sensitive information
+                    set +x
+    
+                    # Synchronize the File Share content
+                    azcopy sync \
+                        --skip-version-check \
+                        --recursive=true\
+                        --delete-destination=true \
+                        --compare-hash=MD5 \
+                        --put-md5 \
+                        --local-hash-storage-mode=HiddenFiles \
+                        ./build/site/ "${FILESHARE_SIGNED_URL}"
+                    '''
+                }
+            } catch (err) {
+                // Only collect azcopy log when the deployment fails, because it is an heavy one
                 sh '''
-                # Don't output sensitive information
-                set +x
-
-                # Synchronize the File Share content
-                azcopy sync \
-                    --skip-version-check \
-                    --recursive=true\
-                    --delete-destination=true \
-                    --compare-hash=MD5 \
-                    --put-md5 \
-                    --local-hash-storage-mode=HiddenFiles \
-                    ./build/site/ "${FILESHARE_SIGNED_URL}"
-
                 # Retrieve azcopy logs to archive them
                 cat /home/jenkins/.azcopy/*.log > azcopy.log
                 '''
