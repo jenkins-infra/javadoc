@@ -26,15 +26,8 @@ node('linux') {
             if (infra.isTrusted()) {
                 sh './scripts/generate-javadoc.sh'
             } else {
-                withCredentials([usernamePassword(
-                    credentialsId: 'artifact-caching-proxy-credentials',
-                    usernameVariable: 'ARTIFACT_CACHING_PROXY_USERNAME',
-                    passwordVariable: 'ARTIFACT_CACHING_PROXY_PASSWORD'
-                )]) {
-                    def repositoryOrigin = "https://repo." + (env.ARTIFACT_CACHING_PROXY_PROVIDER ?: 'azure') + ".jenkins.io"
-                    withEnv(["ARTIFACT_CACHING_PROXY_ORIGIN=${repositoryOrigin}"]) {
-                        sh './scripts/generate-javadoc.sh'
-                    }
+                infra.withArtifactCachingProxy(true) {
+                    sh './scripts/generate-javadoc.sh'
                 }
             }
         }
