@@ -10,7 +10,6 @@ components.addAll(Arrays.asList(
     new Artifact("Bridge Method Injector", "com.infradna.tool", "bridge-method-injector", null, "https://github.com/jenkinsci/bridge-method-injector"),
     new Artifact("Docker fixtures", "org.jenkins-ci.test", "docker-fixtures", null, "https://github.com/jenkinsci/docker-fixtures"),
     new Artifact("File Leak Detector", "org.kohsuke", "file-leak-detector", null, "https://github.com/jenkinsci/lib-file-leak-detector"),
-    new Artifact("GitHub API", "org.kohsuke", "github-api", null, "http://github-api.kohsuke.org/"),
     new Artifact("Jenkins Test Harness", "org.jenkins-ci.main", "jenkins-test-harness", null, "https://github.com/jenkinsci/jenkins-test-harness"),
     new Artifact("Test Annotations", "org.jenkins-ci", "test-annotations", null, "https://github.com/jenkinsci/lib-test-annotations"),
     new Artifact("Memory Monitor Lib", "org.jenkins-ci", "memory-monitor", null, "https://github.com/jenkinsci/extras-memory-monitor"),
