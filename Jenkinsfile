@@ -44,52 +44,24 @@ node('linux') {
     stage('Archive') {
         sh 'cd build && tar -cjf javadoc-site.tar.bz2 site'
         archiveArtifacts artifacts: 'build/*.tar.bz2',
-                            allowEmptyArchive: false,
-                            fingerprint: false,
-                            onlyIfSuccessful: true
-    }
-
-    if (infra.isTrusted()){
-        stage('Publish on Azure') {
-            try {
-                infra.withFileShareServicePrincipal([
-                    servicePrincipalCredentialsId: 'trustedci_javadocjenkinsio_fileshare_serviceprincipal_writer',
-                    fileShare: 'javadoc-jenkins-io',
-                    fileShareStorageAccount: 'javadocjenkinsio',
-                    durationInMinute: 30
-                ]) {
-                    sh '''
-                    # Don't output sensitive information
-                    set +x
-    
-                    # Synchronize the File Share content
-                    azcopy sync \
-                        --skip-version-check \
-                        --recursive=true\
-                        --delete-destination=true \
-                        --compare-hash=MD5 \
-                        --put-md5 \
-                        --local-hash-storage-mode=HiddenFiles \
-                        ./build/site/ "${FILESHARE_SIGNED_URL}"
-                    '''
-                }
-            } catch (err) {
-                currentBuild.result = 'FAILURE'
-                // Only collect azcopy log when the deployment fails, because it is an heavy one
-                sh '''
-                # Retrieve azcopy logs to archive them
-                cat /home/jenkins/.azcopy/*.log > azcopy.log
-                '''
-                archiveArtifacts 'azcopy.log'
-                
-            }
+            allowEmptyArchive: false,
+            fingerprint: false,
+            onlyIfSuccessful: true
+        if (infra.isTrusted()){
+            stash includes: 'build/site/**', name: 'site'
         }
     }
+}
 
-    stage('Clean up') {
-        echo 'We want to generate fresh javadocs on each run'
-        dir('build/site') {
-            deleteDir()
+if (infra.isTrusted()) {
+    node('updatecenter') {
+        stage('Publish') {
+            unstash 'site'
+            sh '''
+            time rsync --recursive --links --times -D \
+                --checksum --verbose \
+                ./build/site/ /data-storage-jenkins-io/javadoc.jenkins.io/
+            '''
         }
     }
 }
