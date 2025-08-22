@@ -59,7 +59,7 @@ if (infra.isTrusted()) {
         stage('Publish') {
             unstash 'site'
             sh '''
-            time rsync --recursive --links --times -D \
+            time rsync --recursive --links -D \
                 --checksum --verbose \
                 ./build/site/ /data-storage-jenkins-io/javadoc.jenkins.io/
             '''
