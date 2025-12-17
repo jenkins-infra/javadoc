@@ -15,19 +15,17 @@ node('linux') {
 
     if (infra.isTrusted()){
         stage('Get lenght of FILESHARE_SIGNED_URL from "withFileShareServicePrincipal" function') {
-            try {
-                infra.withFileShareServicePrincipal([
-                    servicePrincipalCredentialsId: 'trustedci_javadocjenkinsio_fileshare_serviceprincipal_writer',
-                    fileShare: 'javadoc-jenkins-io',
-                    fileShareStorageAccount: 'javadocjenkinsio',
-                    durationInMinute: 30
-                ]) {
-                    sh '''
-                    length=${#FILESHARE_SIGNED_URL}
+            infra.withFileShareServicePrincipal([
+                servicePrincipalCredentialsId: 'trustedci_javadocjenkinsio_fileshare_serviceprincipal_writer',
+                fileShare: 'javadoc-jenkins-io',
+                fileShareStorageAccount: 'javadocjenkinsio',
+                durationInMinute: 30
+            ]) {
+                sh '''
+                length=${#FILESHARE_SIGNED_URL}
 
-                    echo "FILESHARE_SIGNED_URL lenght: ${length}"
-                    '''
-                }
+                echo "FILESHARE_SIGNED_URL lenght: ${length}"
+                '''
             }
         }
     }
