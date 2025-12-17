@@ -53,7 +53,6 @@ node('linux') {
         stage('Publish on Azure') {
             try {
                 infra.withFileShareServicePrincipal([
-                    servicePrincipalCredentialsId: 'trustedci_javadocjenkinsio_fileshare_serviceprincipal_writer',
                     fileShare: 'javadoc-jenkins-io',
                     fileShareStorageAccount: 'javadocjenkinsio',
                     durationInMinute: 30
