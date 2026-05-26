@@ -71,6 +71,9 @@ node('linux') {
                         ./build/site/ "${FILESHARE_SIGNED_URL}"
                     '''
                 }
+                stage ('Publish build report') {
+                    publishBuildStatusReport()
+                }
             } catch (err) {
                 currentBuild.result = 'FAILURE'
                 // Only collect azcopy log when the deployment fails, because it is an heavy one
