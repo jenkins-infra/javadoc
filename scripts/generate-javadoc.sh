@@ -68,6 +68,8 @@ function in_array() {
 	return 1
 }
 
+command -v jq >/dev/null || die 'failed to find jq executable in your PATH'
+
 set -o pipefail
 
 if [[ -z ${LTS_RELEASES} ]]; then
