@@ -68,9 +68,6 @@ function in_array() {
 	return 1
 }
 
-wget --no-verbose -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 || die 'failed to download jq'
-chmod +x jq || die 'failed to make jq executable'
-
 set -o pipefail
 
 if [[ -z ${LTS_RELEASES} ]]; then
@@ -85,7 +82,7 @@ if [[ -z ${LTS_RELEASES} ]]; then
 		[[ -n $LTS_RELEASES ]] && LTS_RELEASES+=' '
 		LTS_RELEASES+="$version"
 		i=$((i + 1))
-	done < <(curl 'https://repo.jenkins-ci.org/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.*' | ./jq --raw-output '.results[].version' | sort -rV)
+	done < <(curl 'https://repo.jenkins-ci.org/api/search/versions?g=org.jenkins-ci.main&a=jenkins-core&repos=releases&v=?.*.*' | jq --raw-output '.results[].version' | sort -rV)
 fi
 
 set +o pipefail
