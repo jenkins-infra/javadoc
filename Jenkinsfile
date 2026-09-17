@@ -1,5 +1,4 @@
 #!/usr/bin/env groovy
-
 properties([
     buildDiscarder(logRotator(numToKeepStr: '2')),
     pipelineTriggers([cron('H 5 * * 3')]),
@@ -50,40 +49,7 @@ node('linux') {
 
     if (infra.isTrusted()){
         stage('Publish on Azure') {
-            try {
-                infra.withFileShareServicePrincipal([
-                    fileShare: 'javadoc-jenkins-io',
-                    fileShareStorageAccount: 'javadocjenkinsio',
-                    durationInMinute: 30
-                ]) {
-                    sh '''
-                    # Don't output sensitive information
-                    set +x
-    
-                    # Synchronize the File Share content
-                    azcopy sync \
-                        --skip-version-check \
-                        --recursive=true\
-                        --delete-destination=true \
-                        --compare-hash=MD5 \
-                        --put-md5 \
-                        --local-hash-storage-mode=HiddenFiles \
-                        ./build/site/ "${FILESHARE_SIGNED_URL}"
-                    '''
-                }
-                stage ('Publish build report') {
-                    publishBuildStatusReport()
-                }
-            } catch (err) {
-                currentBuild.result = 'FAILURE'
-                // Only collect azcopy log when the deployment fails, because it is an heavy one
-                sh '''
-                # Retrieve azcopy logs to archive them
-                cat /home/jenkins/.azcopy/*.log > azcopy.log
-                '''
-                archiveArtifacts 'azcopy.log'
-                
-            }
+            infra.deployWebsite('build/site')
         }
     }
 
