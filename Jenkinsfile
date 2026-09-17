@@ -1,6 +1,4 @@
 #!/usr/bin/env groovy
-@Library('pipeline-library@pull/1055/head') _
-
 properties([
     buildDiscarder(logRotator(numToKeepStr: '2')),
     pipelineTriggers([cron('H 5 * * 3')]),
