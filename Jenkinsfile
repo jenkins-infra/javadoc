@@ -51,6 +51,9 @@ node('linux') {
         stage('Publish on Azure') {
             infra.deployWebsite('build/site')
         }
+        stage ('Publish build report') {
+            publishBuildStatusReport()
+        }
     }
 
     stage('Clean up') {
