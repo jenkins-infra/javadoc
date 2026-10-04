@@ -9,10 +9,15 @@ pushd "$LATESTDIR"
 cp -R * "${SITE_DIR}"
 popd
 
-available_javadoc_links="<a href="index-core.html">Latest Weekly</a>"
+available_javadoc_links=""
 for archive in $(find "${ARCHIVE_DIR}" -maxdepth 1 -type d -name 'jenkins-*' | sort --version-sort -r); do
     version="${archive##*/jenkins-}"
-    available_javadoc_links="${available_javadoc_links}<br><a href=\"archive/jenkins-${version}/\">${version}</a>"
+	# First one is the latest Weekly release, while the other are LTS ones
+	if [[ -z "${available_javadoc_links}" ]]; then
+		available_javadoc_links="<a href="index-core.html">Latest Weekly (${version})</a>"
+	else
+	    available_javadoc_links="${available_javadoc_links}<br><a href=\"archive/jenkins-${version}/\">LTS ${version}</a>"
+	fi
 done
 
 pushd "${SITE_DIR}"
