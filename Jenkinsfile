@@ -7,21 +7,13 @@ properties([
 node('linux') {
     checkout scm
 
-    dir("scripts/build") {
-        deleteDir()
-    }
-
-    dir("build") {
-        deleteDir()
-    }
-
     stage('Generate Javadocs') {
         withEnv([
                 "JAVA_HOME=${tool 'jdk17'}",
                 "PATH+GROOVY=${tool 'groovy'}/bin",
                 "PATH+JAVA=${tool 'jdk17'}/bin",
         ]) {
-            if (infra.isTrusted()) {
+            if (infra.isTrustedCiController()) {
                 sh './scripts/generate-javadoc.sh'
             } else {
                 infra.withArtifactCachingProxy(true) {
@@ -47,19 +39,12 @@ node('linux') {
                             onlyIfSuccessful: true
     }
 
-    if (infra.isTrusted()){
+    if (infra.isTrustedCiController()){
         stage('Publish on Azure') {
             infra.deployWebsite('build/site')
         }
         stage ('Publish build report') {
             publishBuildStatusReport()
-        }
-    }
-
-    stage('Clean up') {
-        echo 'We want to generate fresh javadocs on each run'
-        dir('build/site') {
-            deleteDir()
         }
     }
 }
