@@ -7,66 +7,68 @@ properties([
 node('linux') {
     checkout scm
 
-    dir("scripts/build") {
-        deleteDir()
-    }
+    parallel(
+        'Javadoc': {
+            dir("scripts/build") {
+                deleteDir()
+            }
 
-    dir("build") {
-        deleteDir()
-    }
+            dir("build") {
+                deleteDir()
+            }
 
-    stage('Generate Javadocs') {
-        withEnv([
-                "JAVA_HOME=${tool 'jdk17'}",
-                "PATH+GROOVY=${tool 'groovy'}/bin",
-                "PATH+JAVA=${tool 'jdk17'}/bin",
-        ]) {
-            if (infra.isTrusted()) {
-                sh './scripts/generate-javadoc.sh'
-            } else {
-                infra.withArtifactCachingProxy(true) {
-                    parallel(
-                        'scripts': {
+            stage('Generate Javadocs') {
+                withEnv([
+                        "JAVA_HOME=${tool 'jdk17'}",
+                        "PATH+GROOVY=${tool 'groovy'}/bin",
+                        "PATH+JAVA=${tool 'jdk17'}/bin",
+                ]) {
+                    if (infra.isTrusted()) {
+                        sh './scripts/generate-javadoc.sh'
+                    } else {
+                        infra.withArtifactCachingProxy(true) {
                             sh './scripts/generate-javadoc.sh'
-                        },
-                        'Dockerfile': {
-                            sh 'docker build -t javadoc-test .'
                         }
-                    )
+                    }
                 }
             }
+
+            stage('Generate Shortnames') {
+                sh './scripts/generate-shortnames.sh'
+            }
+
+            stage('Prepare Latest') {
+                sh './scripts/default-to-latest.sh'
+            }
+
+            stage('Archive') {
+                sh 'cd build && tar -cjf javadoc-site.tar.bz2 site'
+                archiveArtifacts artifacts: 'build/*.tar.bz2',
+                                    allowEmptyArchive: false,
+                                    fingerprint: false,
+                                    onlyIfSuccessful: true
+            }
+
+            if (infra.isTrusted()){
+                stage('Publish on Azure') {
+                    infra.deployWebsite('build/site')
+                }
+                stage ('Publish build report') {
+                    publishBuildStatusReport()
+                }
+            }
+
+            stage('Clean up') {
+                echo 'We want to generate fresh javadocs on each run'
+                dir('build/site') {
+                    deleteDir()
+                }
+            }
+        },
+        'Dockerfile': {
+            if (infra.isCiController()) {
+                sh 'docker build -t javadoc-test .'
+            }
         }
-    }
-
-    stage('Generate Shortnames') {
-        sh './scripts/generate-shortnames.sh'
-    }
-
-    stage('Prepare Latest') {
-        sh './scripts/default-to-latest.sh'
-    }
-
-    stage('Archive') {
-        sh 'cd build && tar -cjf javadoc-site.tar.bz2 site'
-        archiveArtifacts artifacts: 'build/*.tar.bz2',
-                            allowEmptyArchive: false,
-                            fingerprint: false,
-                            onlyIfSuccessful: true
-    }
-
-    if (infra.isTrusted()){
-        stage('Publish on Azure') {
-            infra.deployWebsite('build/site')
-        }
-        stage ('Publish build report') {
-            publishBuildStatusReport()
-        }
-    }
-
-    stage('Clean up') {
-        echo 'We want to generate fresh javadocs on each run'
-        dir('build/site') {
-            deleteDir()
-        }
-    }
+    )
 }
