@@ -7,6 +7,15 @@ properties([
 node('linux') {
     checkout scm
 
+    // Workspace cleanup in case we need to run this job from permanent trusted.ci.jenkins.io agent
+    dir("scripts/build") {
+        deleteDir()
+    }
+
+    dir("build") {
+        deleteDir()
+    }
+
     stage('Generate Javadocs') {
         withEnv([
                 "JAVA_HOME=${tool 'jdk17'}",
@@ -45,6 +54,13 @@ node('linux') {
         }
         stage ('Publish build report') {
             publishBuildStatusReport()
+        }
+    }
+
+    stage('Clean up') {
+        echo 'We want to generate fresh javadocs on each run'
+        dir('build/site') {
+            deleteDir()
         }
     }
 }
