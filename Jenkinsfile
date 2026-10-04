@@ -7,6 +7,7 @@ properties([
 node('linux') {
     checkout scm
 
+    // Workspace cleanup in case we need to run this job from permanent trusted.ci.jenkins.io agent
     dir("scripts/build") {
         deleteDir()
     }
@@ -21,7 +22,7 @@ node('linux') {
                 "PATH+GROOVY=${tool 'groovy'}/bin",
                 "PATH+JAVA=${tool 'jdk17'}/bin",
         ]) {
-            if (infra.isTrusted()) {
+            if (infra.isTrustedCiController()) {
                 sh './scripts/generate-javadoc.sh'
             } else {
                 infra.withArtifactCachingProxy(true) {
@@ -47,7 +48,7 @@ node('linux') {
                             onlyIfSuccessful: true
     }
 
-    if (infra.isTrusted()){
+    if (infra.isTrustedCiController()){
         stage('Publish on Azure') {
             infra.deployWebsite('build/site')
         }
