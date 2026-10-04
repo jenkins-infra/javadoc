@@ -23,7 +23,7 @@ for path in $(find "$LATESTDIR" -type f \( -iname "*.html" ! -iname "*[-]*" \));
 	# purge any paths we found with hyphens. This is necessary because the
 	# `-iname` filter above only applies to the filename, and not the full
 	# path. This mostly removes the /class-use/ paths
-	if [[ $(expr index "$relative" "\-") != "0" ]]; then
+	if [[ "$relative" == *-* ]]; then
 		continue
 	fi
 
