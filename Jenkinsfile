@@ -25,7 +25,14 @@ node('linux') {
                 sh './scripts/generate-javadoc.sh'
             } else {
                 infra.withArtifactCachingProxy(true) {
-                    sh './scripts/generate-javadoc.sh'
+                    parallel(
+                        'scripts': {
+                            sh './scripts/generate-javadoc.sh'
+                        },
+                        'Dockerfile': {
+                            sh 'docker build -t javadoc-test .'
+                        }
+                    )
                 }
             }
         }

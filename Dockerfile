@@ -1,24 +1,29 @@
-# Use nginx stable (even minor version)
-FROM nginx:1.24.0
+FROM eclipse-temurin:17-jdk AS builder
 
-ARG PUBLISH_PATH=/usr/share/nginx/html
+RUN apt-get update && apt-get install -y \
+    wget ant groovy curl sed jq \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y openjdk-11-jdk wget ant groovy curl sed
+WORKDIR /opt/build/javadoc
+COPY resources/ resources/
+COPY scripts/ scripts/
+COPY src/ src/
 
-# Just test settings to speedup the startup
 ARG LTS_RELEASES=""
 ARG PLUGINS=""
 
-WORKDIR /opt/build/javadoc
-COPY resources/ /opt/build/javadoc/resources
-COPY scripts/ /opt/build/javadoc/scripts
-COPY src/ /opt/build/javadoc/src
-RUN bash -ex scripts/generate-javadoc.sh && bash -ex scripts/generate-shortnames.sh && bash -ex scripts/default-to-latest.sh && cp -R /opt/build/javadoc/build/site/* ${PUBLISH_PATH} && rm -rf /opt/build/javadoc
+RUN bash -ex scripts/generate-javadoc.sh \
+ && bash -ex scripts/generate-shortnames.sh \
+ && bash -ex scripts/default-to-latest.sh
 
 # For testing of particular steps
 #RUN groovy -cp src/main/groovy scripts/generate-javadoc-components.groovy
 #RUN cp -R /opt/build/javadoc/build/site/* ${PUBLISH_PATH}
 
-# TODO: Bonus points squash apt-get and build and remove unneccesary packages after the build (or use different builder and prod images)
+FROM nginx:1.24.0
+
+ARG PUBLISH_PATH=/usr/share/nginx/html
+
+COPY --from=builder /opt/build/javadoc/build/site/ ${PUBLISH_PATH}/
 
 WORKDIR ${PUBLISH_PATH}/
