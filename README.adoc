@@ -12,18 +12,7 @@ The link:http://javadoc.jenkins.io/[jenkins.io production site] includes:
 
 ## Development
 
-The repository offers a `Dockerfile`,
-which can be used for running the build and verifying results.
-
-### Building image
-
-Build command:
-
-```shell
-docker build -t jenkinsinfra/javadoc-dev --build-arg LTS_RELEASES="2.332 2.346" --build-arg PLUGINS="credentials git git-client" .
-```
-
-Optional arguments:
+You can set the following optional environment variables to speedup your local testing:
 
 * `LTS_RELEASES` - list of LTS releases to be published
 ** Example: "2.332 2.346"
@@ -32,14 +21,3 @@ Optional arguments:
 * `PLUGINS` - list of plugins to be published
 ** Example: "credentials git git-client"
 ** Default: all plugins by the default Jenkins update site
-
-### Running image
-
-Run command:
-
-```shell
-docker run --rm -p 9090:80 jenkinsinfra/javadoc-dev
-```
-
-After starting the image the update site will be available at `DOCKER_HOST:9090`,
-so you will be able to browse the contents similarly to link:http://javadoc.jenkins.io/[Jenkins Javadoc].
