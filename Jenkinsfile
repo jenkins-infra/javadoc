@@ -39,4 +39,10 @@ node('linux') {
             publishBuildStatusReport()
         }
     }
+
+    stage('Cleanup') {
+        // Workspace cleanup in case we need to run this job from permanent trusted.ci.jenkins.io agent
+        echo 'We want to generate fresh javadocs on each run'
+        sh 'make clean'
+    }
 }
