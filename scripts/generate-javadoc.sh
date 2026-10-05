@@ -72,12 +72,13 @@ command -v jq >/dev/null || die 'failed to find jq executable in your PATH'
 
 set -o pipefail
 
+MAX_RELEASES=5
 if [[ -z ${LTS_RELEASES} ]]; then
 	echo "LTS_RELEASES is not defined. Pulling all releases from Jenkins Artifactory"
 	i=0
 	LTS_LINES=()
 	while read -r version; do
-		[[ $i -ge 10 ]] && break
+		[[ $i -ge "${MAX_RELEASES}" ]] && break
 		LTS_LINE=${version%.*}
 		in_array "${LTS_LINE}" "${LTS_LINES[@]}" && continue
 		LTS_LINES+=("$LTS_LINE")
