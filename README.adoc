@@ -12,6 +12,8 @@ The link:http://javadoc.jenkins.io/[jenkins.io production site] includes:
 
 ## Development
 
+To build javadoc website, run `make build`.
+
 You can set the following optional environment variables to speedup your local testing:
 
 * `LTS_RELEASES` - list of LTS releases to be published
